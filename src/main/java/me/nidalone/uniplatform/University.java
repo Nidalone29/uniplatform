@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "UNIVERSITY")
@@ -45,13 +46,13 @@ public class University {
     this.courses = courses;
   }
 
-  public Course findCourse(String courseName) {
+  public Optional<Course> findCourse(String courseName) {
     for (Course x : this.courses) {
       if (x.getDegreeProgram().equals(courseName)) {
-        return x;
+        return Optional.of(x);
       }
     }
-    return null;
+    return Optional.empty();
   }
 
   public void deleteCourse(Course course) {

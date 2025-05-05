@@ -3,6 +3,7 @@ package me.nidalone.uniplatform;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "COURSE")
@@ -32,5 +33,14 @@ public class Course {
 
   public void setDegreeProgram(String degreeProgram) {
     this.degreeProgram = degreeProgram;
+  }
+
+  public Optional<Exam> findExam(String exam) {
+    for (Exam e : this.exams) {
+      if (e.getName().equals(exam)) {
+        return Optional.of(e);
+      }
+    }
+    return Optional.empty();
   }
 }
