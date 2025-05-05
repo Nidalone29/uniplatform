@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
   @ResponseBody
   @ExceptionHandler(UniNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -19,14 +18,14 @@ public class GlobalExceptionHandler {
   @ResponseBody
   @ExceptionHandler(CourseNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  String corsoNotFoundHandler(CourseNotFoundException ex) {
+  String courseNotFoundHandler(CourseNotFoundException ex) {
     return ex.getMessage();
   }
 
   @ResponseBody
   @ExceptionHandler(ExamNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  String esameNotFoundHandler(ExamNotFoundException ex) {
+  String examNotFoundHandler(ExamNotFoundException ex) {
     return ex.getMessage();
   }
 
@@ -40,14 +39,14 @@ public class GlobalExceptionHandler {
   @ResponseBody
   @ExceptionHandler(CourseAlreadyExistsException.class)
   @ResponseStatus(HttpStatus.FORBIDDEN)
-  String corsoAlreadyExistsException(CourseAlreadyExistsException ex) {
+  String courseAlreadyExistsException(CourseAlreadyExistsException ex) {
     return ex.getMessage();
   }
 
   @ResponseBody
   @ExceptionHandler(ExamAlreadyExistsException.class)
   @ResponseStatus(HttpStatus.FORBIDDEN)
-  String esameAlreadyExistsException(ExamAlreadyExistsException ex) {
+  String examAlreadyExistsException(ExamAlreadyExistsException ex) {
     return ex.getMessage();
   }
 }
