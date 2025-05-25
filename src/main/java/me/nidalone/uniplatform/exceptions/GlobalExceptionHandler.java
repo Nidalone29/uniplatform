@@ -1,4 +1,4 @@
-package me.nidalone.uniplatform;
+package me.nidalone.uniplatform.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

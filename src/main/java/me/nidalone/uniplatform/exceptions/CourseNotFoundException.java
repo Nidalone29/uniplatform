@@ -1,4 +1,4 @@
-package me.nidalone.uniplatform;
+package me.nidalone.uniplatform.exceptions;
 
 public class CourseNotFoundException extends RuntimeException {
   public CourseNotFoundException(String course) {
