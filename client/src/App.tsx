@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -8,15 +7,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+
+import { Toaster } from "@/components/ui/sonner"
+
 import ky from 'ky'
 import type { University } from './types/university';
 import { useEffect, useState } from 'react';
+import { UniversityForm } from "./UniversityForm";
+import { EditingDialog } from "./EditingDialog";
 
 async function getUniversities(): Promise<University[]> {
   return await ky('http://localhost:8080/api/universities/').json<University[]>();
 }
 
-function App() {
+export function App() {
   const [universities, setUniversities] = useState<University[]>([]);
 
   useEffect(() => {
@@ -27,6 +31,7 @@ function App() {
 
   return (
     <>
+      <Toaster position="top-center" richColors />
       <div className="flex m-2 align-middle content-center justify-center">
         <Table>
           <TableCaption>A list of your recent invoices.</TableCaption>
@@ -45,9 +50,7 @@ function App() {
                   course.name + ", "
                 ))}</TableCell>
                 <TableCell>
-                  <Button>
-                    EDIT!
-                  </Button>
+                  <EditingDialog CustomForm={UniversityForm} />
                 </TableCell>
               </TableRow>
             ))}
@@ -57,5 +60,3 @@ function App() {
     </>
   )
 }
-
-export default App
