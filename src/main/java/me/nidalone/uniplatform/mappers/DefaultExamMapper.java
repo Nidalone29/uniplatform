@@ -19,6 +19,6 @@ public class DefaultExamMapper implements ExamMapper {
       return null;
     }
 
-    return new ExamDTO(exam.getName(), exam.getEcts());
+    return new ExamDTO(exam.getName(), exam.getSlug(), exam.getEcts());
   }
 }

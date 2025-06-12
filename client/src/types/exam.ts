@@ -1,4 +1,5 @@
 export interface Exam {
   name: string,
-  exts: number
+  slug: string,
+  ects: number
 }

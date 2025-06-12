@@ -8,20 +8,20 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import { Toaster } from "@/components/ui/sonner"
-
 import ky from 'ky'
-import type { University } from './types/university';
+import type { University } from '../types/university';
 import { useEffect, useState } from 'react';
-import { UniversityForm } from "./UniversityForm";
-import { EditingDialog } from "./EditingDialog";
+import { UniversityForm } from "../components/common/UniversityForm";
+import { EditingDialog } from "../components/common/EditingDialog";
+import { useNavigate } from "react-router";
 
 async function getUniversities(): Promise<University[]> {
   return await ky('http://localhost:8080/api/universities/').json<University[]>();
 }
 
-export function App() {
+export function UniversitiesTable() {
   const [universities, setUniversities] = useState<University[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getUniversities()
@@ -31,10 +31,9 @@ export function App() {
 
   return (
     <>
-      <Toaster position="top-center" richColors />
       <div className="flex m-2 align-middle content-center justify-center">
         <Table>
-          <TableCaption>A list of your recent invoices.</TableCaption>
+          <TableCaption>UNIVERSITIES Table.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">University name</TableHead>
@@ -44,13 +43,17 @@ export function App() {
           </TableHeader>
           <TableBody>
             {universities.map(uni => (
-              <TableRow>
+              <TableRow onClick={() => {
+                navigate(`/${uni.slug}`, { viewTransition: true });
+              }}>
                 <TableCell className="font-medium">{uni.name}</TableCell>
                 <TableCell>{uni.courses.map(course => (
                   course.name + ", "
                 ))}</TableCell>
                 <TableCell>
-                  <EditingDialog CustomForm={UniversityForm} />
+                  <span onClick={e => e.stopPropagation()}>
+                    <EditingDialog CustomForm={UniversityForm} />
+                  </span>
                 </TableCell>
               </TableRow>
             ))}
@@ -58,5 +61,5 @@ export function App() {
         </Table>
       </div>
     </>
-  )
+  );
 }

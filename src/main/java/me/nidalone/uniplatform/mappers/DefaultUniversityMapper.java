@@ -29,6 +29,7 @@ public class DefaultUniversityMapper implements UniversityMapper {
   public UniversityDTO toDTO(University university) {
     return new UniversityDTO(
         university.getName(),
+        university.getSlug(),
         Optional.ofNullable(university.getCourses())
             .map(courses -> courses.stream().map(dcm::toDTO).toList())
             .orElse(Collections.emptyList()));

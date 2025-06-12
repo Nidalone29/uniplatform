@@ -30,6 +30,7 @@ public class DefaultCourseMapper implements CourseMapper {
   public CourseDTO toDTO(Course course) {
     return new CourseDTO(
         course.getName(),
+        course.getSlug(),
         Optional.ofNullable(course.getExams())
             .map(exams -> exams.stream().map(dem::toDTO).toList())
             .orElse(Collections.emptyList()));

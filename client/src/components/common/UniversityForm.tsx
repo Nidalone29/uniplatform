@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import type { ComponentWithDialogControlProps } from "./types/formTypes"
+import type { ComponentWithDialogControlProps } from "../../types/formTypes"
 
 // TODO the schemas will all be eventually generated via https://github.com/orval-labs/orval
 const FormSchema = z.object({
@@ -61,5 +61,5 @@ export function UniversityForm({ closingFunct }: ComponentWithDialogControlProps
         />
       </form>
     </Form>
-  )
+  );
 }

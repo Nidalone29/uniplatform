@@ -11,6 +11,8 @@ import me.nidalone.uniplatform.repositories.ExamRepository;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DefaultExamService implements ExamService {
   private final ExamRepository examRepository;
@@ -40,6 +42,19 @@ public class DefaultExamService implements ExamService {
     return examRepository
         .findByCourseAndSlug(course, examSlug)
         .orElseThrow(() -> new ExamNotFoundException(courseSlug, examSlug));
+  }
+
+  @Override
+  public List<Exam> getAllExams(String universitySlug, String courseSlug) {
+    University university =
+        universityRepository
+            .findBySlug(universitySlug)
+            .orElseThrow(() -> new UniNotFoundException(universitySlug));
+    Course course =
+        courseRepository
+            .findByUniAndSlug(university, courseSlug)
+            .orElseThrow(() -> new CourseNotFoundException(courseSlug));
+    return course.getExams();
   }
 
   @Override

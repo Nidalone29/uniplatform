@@ -1,5 +1,7 @@
 package me.nidalone.uniplatform.controllers;
 
+import java.util.List;
+
 import me.nidalone.uniplatform.domain.dto.CourseDTO;
 import me.nidalone.uniplatform.mappers.CourseMapper;
 import me.nidalone.uniplatform.services.CourseService;
@@ -20,6 +22,19 @@ public class CourseController {
   }
 
   /**
+   * Get all courses of a university
+   *
+   * @param universitySlug
+   * @return
+   */
+  @GetMapping(path = "/")
+  public ResponseEntity<List<CourseDTO>> getAllCourses(@PathVariable String universitySlug) {
+    return ResponseEntity.ok()
+        .body(
+            courseService.getAllCourses(universitySlug).stream().map(courseMapper::toDTO).toList());
+  }
+
+  /**
    * Get a course
    *
    * @param universitySlug
@@ -27,7 +42,7 @@ public class CourseController {
    * @return
    */
   @GetMapping(path = "/{courseSlug}")
-  public ResponseEntity<CourseDTO> getCourseExams(
+  public ResponseEntity<CourseDTO> getCourse(
       @PathVariable String universitySlug, @PathVariable String courseSlug) {
     return ResponseEntity.ok(
         courseMapper.toDTO(courseService.getCourse(universitySlug, courseSlug)));

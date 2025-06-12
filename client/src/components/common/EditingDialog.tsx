@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { type ComponentWithDialogControlProps } from "./types/formTypes";
+import { type ComponentWithDialogControlProps } from "../../types/formTypes";
 
 interface EditingDialogProps {
   CustomForm: React.ComponentType<ComponentWithDialogControlProps>;

@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/universities/{universitySlug}/courses/{courseSlug}/exams")
 public class ExamController {
@@ -18,6 +20,23 @@ public class ExamController {
   public ExamController(ExamService examService, ExamMapper examMapper) {
     this.examService = examService;
     this.examMapper = examMapper;
+  }
+
+  /**
+   * Get all exams of a course
+   *
+   * @param universitySlug
+   * @param courseSlug
+   * @return
+   */
+  @GetMapping(path = "/")
+  public ResponseEntity<List<ExamDTO>> getAllExams(
+      @PathVariable String universitySlug, @PathVariable String courseSlug) {
+    return ResponseEntity.ok()
+        .body(
+            examService.getAllExams(universitySlug, courseSlug).stream()
+                .map(examMapper::toDTO)
+                .toList());
   }
 
   /**

@@ -8,6 +8,8 @@ import me.nidalone.uniplatform.repositories.CourseRepository;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DefaultCourseService implements CourseService {
   private final CourseRepository courseRepository;
@@ -29,6 +31,15 @@ public class DefaultCourseService implements CourseService {
     return courseRepository
         .findByUniAndSlug(university, courseSlug)
         .orElseThrow(() -> new CourseNotFoundException(courseSlug));
+  }
+
+  @Override
+  public List<Course> getAllCourses(String universitySlug) {
+    University university =
+        universityRepository
+            .findBySlug(universitySlug)
+            .orElseThrow(() -> new UniNotFoundException(universitySlug));
+    return university.getCourses();
   }
 
   @Override
