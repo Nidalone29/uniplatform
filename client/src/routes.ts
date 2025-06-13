@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router";
-import { UniversitiesTable } from "./pages/UniversitiesTable";
-import { CoursesTable } from "./pages/CoursesTable";
+import { UniversitiesTable } from "./components/tables/UniversitiesTable";
+import { CoursesTable } from "./components/tables/CoursesTable";
 import { TableLayout } from "./layouts/TableLayout";
-import { ExamsTable } from "./pages/ExamsTable";
+import { ExamsTable } from "./components/tables/ExamsTable";
 
 export const router = createBrowserRouter([
   {

@@ -6,7 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { useMatches } from "react-router";
+import { Link, useMatches } from "react-router";
 
 
 export function TableBreadcrumb() {
@@ -20,16 +20,16 @@ export function TableBreadcrumb() {
             (i != arr.length - 1) ? (
               <>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href={match.pathname}>{"" + match.handle}</BreadcrumbLink>
+                  <BreadcrumbLink asChild>
+                    <Link to={match.pathname} viewTransition>{"" + match.handle}</Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
               </>
             ) : (
-              <>
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{"" + match.handle}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </>
+              <BreadcrumbItem>
+                <BreadcrumbPage>{"" + match.handle}</BreadcrumbPage>
+              </BreadcrumbItem>
             )
           ))
         }

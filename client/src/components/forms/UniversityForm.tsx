@@ -1,7 +1,7 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -9,9 +9,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import type { ComponentWithDialogControlProps } from "../../types/formTypes"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import type { ComponentWithDialogControlProps } from "../../types/formTypes";
 
 // TODO the schemas will all be eventually generated via https://github.com/orval-labs/orval
 const FormSchema = z.object({

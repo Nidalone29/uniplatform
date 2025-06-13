@@ -6,15 +6,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-
-import ky from 'ky'
-import { useEffect, useState } from 'react';
-import { UniversityForm } from "../components/common/UniversityForm";
-import { EditingDialog } from "../components/common/EditingDialog";
-import type { Exam } from "@/types/exam";
+import ky from 'ky';
 import { useParams } from "react-router";
+import { useEffect, useState } from 'react';
+
+import { UniversityForm } from "../forms/UniversityForm";
+import { EditingDialog } from "../common/EditingDialog";
+import type { Exam } from "@/types/exam";
 
 async function getExams(uni, course): Promise<Exam[]> {
   return await ky("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/").json<Exam[]>();

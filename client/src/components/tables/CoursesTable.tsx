@@ -6,26 +6,29 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import ky from 'ky'
-import type { University } from '../types/university';
+import ky from 'ky';
 import { useEffect, useState } from 'react';
-import { UniversityForm } from "../components/common/UniversityForm";
-import { EditingDialog } from "../components/common/EditingDialog";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
-async function getUniversities(): Promise<University[]> {
-  return await ky('http://localhost:8080/api/universities/').json<University[]>();
+import { UniversityForm } from "../forms/UniversityForm";
+import { EditingDialog } from "../common/EditingDialog";
+import type { Course } from "@/types/course";
+
+async function getCourses(uni): Promise<Course[]> {
+  return await ky("http://localhost:8080/api/universities/" + uni + "/courses/").json<Course[]>();
 }
 
-export function UniversitiesTable() {
-  const [universities, setUniversities] = useState<University[]>([]);
+export function CoursesTable() {
+  const [courses, setCourses] = useState<Course[]>([]);
   const navigate = useNavigate();
 
+  const params = useParams();
+
   useEffect(() => {
-    getUniversities()
-      .then(data => setUniversities(data))
+    getCourses(params.UniID)
+      .then(data => setCourses(data))
       .catch(error => console.error("Failed to fetch universities:", error));
   }, []);
 
@@ -33,7 +36,7 @@ export function UniversitiesTable() {
     <>
       <div className="flex m-2 align-middle content-center justify-center">
         <Table>
-          <TableCaption>UNIVERSITIES Table.</TableCaption>
+          <TableCaption>COURSES Table.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">University name</TableHead>
@@ -42,13 +45,13 @@ export function UniversitiesTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {universities.map(uni => (
+            {courses.map(course => (
               <TableRow onClick={() => {
-                navigate(`/${uni.slug}`, { viewTransition: true });
+                navigate(`${course.slug}`, { viewTransition: true });
               }}>
-                <TableCell className="font-medium">{uni.name}</TableCell>
-                <TableCell>{uni.courses.map(course => (
-                  course.name + ", "
+                <TableCell className="font-medium">{course.name}</TableCell>
+                <TableCell>{course.exams.map(exam => (
+                  exam.name + ", "
                 ))}</TableCell>
                 <TableCell>
                   <span onClick={e => e.stopPropagation()}>
@@ -59,7 +62,7 @@ export function UniversitiesTable() {
             ))}
           </TableBody>
         </Table>
-      </div>
+      </div >
     </>
   );
 }
