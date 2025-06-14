@@ -6,13 +6,11 @@ import { Outlet } from "react-router";
 
 export function TableLayout() {
   return (
-    <>
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <ModeToggle />
-        <Toaster position="top-center" richColors />
-        <TableBreadcrumb />
-        <Outlet />
-      </ThemeProvider>
-    </>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <ModeToggle />
+      <Toaster position="top-center" richColors />
+      <TableBreadcrumb />
+      <Outlet />
+    </ThemeProvider>
   );
 }
