@@ -34,7 +34,6 @@ export function UniversitiesTable() {
     <>
       <div className="flex m-2 align-middle content-center justify-center bg-card">
         <Table>
-          <TableCaption>UNIVERSITIES Table.</TableCaption>
           <TableHeader >
             <TableRow>
               <TableHead className="w-[100px]">University name</TableHead>

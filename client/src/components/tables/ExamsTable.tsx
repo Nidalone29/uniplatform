@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -35,7 +34,6 @@ export function ExamsTable() {
     <>
       <div className="flex m-2 align-middle content-center justify-center bg-card">
         <Table>
-          <TableCaption>EXAMS Table.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">University name</TableHead>
