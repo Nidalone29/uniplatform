@@ -33,7 +33,7 @@ export function ExamsTable() {
 
   return (
     <>
-      <div className="flex m-2 align-middle content-center justify-center">
+      <div className="flex m-2 align-middle content-center justify-center bg-card">
         <Table>
           <TableCaption>EXAMS Table.</TableCaption>
           <TableHeader>

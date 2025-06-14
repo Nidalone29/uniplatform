@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router";
 import { UniversitiesTable } from "./components/tables/UniversitiesTable";
 import { CoursesTable } from "./components/tables/CoursesTable";
-import { TableLayout } from "./layouts/TableLayout";
 import { ExamsTable } from "./components/tables/ExamsTable";
+import { MainPage } from "./pages/MainPage";
 
 export const router = createBrowserRouter([
   {
-    Component: TableLayout,
+    Component: MainPage,
     children: [
       {
         path: "/",
