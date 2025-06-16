@@ -6,8 +6,8 @@ import { TableLayout } from "@/layouts/TableLayout";
 export function MainPage() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <SiteHeader />
       <Toaster position="top-center" richColors />
+      <SiteHeader />
       <TableLayout />
     </ThemeProvider>
   );

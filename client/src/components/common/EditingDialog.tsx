@@ -7,16 +7,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { type ComponentWithDialogControlProps } from "../../types/formTypes";
+import { useState } from "react";
 import { SquarePen } from "lucide-react";
 
-interface EditingDialogProps {
-  CustomForm: React.ComponentType<ComponentWithDialogControlProps>;
+import { type Entities, type FormInDialogProps } from "@/types/formTypes";
+
+interface EditingDialogProps<T extends Entities> {
+  data: T, // just a passthrough
+  CustomForm: React.ComponentType<FormInDialogProps<T>>;
 }
 
-export function EditingDialog({ CustomForm }: EditingDialogProps) {
+export function EditingDialog<T extends Entities>({ data, CustomForm }: EditingDialogProps<T>) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   return (
@@ -26,9 +28,9 @@ export function EditingDialog({ CustomForm }: EditingDialogProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogTitle>Editing {data.name /* this works because we know that every entity has the property "name" */}</DialogTitle>
         </DialogHeader>
-        <CustomForm closingFunct={setOpenDialog} />
+        <CustomForm formData={data} closingFunct={setOpenDialog} />
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>

@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -12,7 +11,8 @@ import ky from 'ky';
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router";
 
-import type { University } from '../../types/university';
+import type { University } from '@/types/university';
+
 import { UniversityForm } from "../forms/UniversityForm";
 import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
@@ -54,7 +54,7 @@ export function UniversitiesTable() {
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={e => e.stopPropagation()}>
-                      <EditingDialog CustomForm={UniversityForm} />
+                      <EditingDialog data={uni} CustomForm={UniversityForm} />
                     </span>
                     <span onClick={e => e.stopPropagation()}>
                       <DeleteDialog />

@@ -11,12 +11,12 @@ import ky from 'ky';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router";
 
-import { UniversityForm } from "../forms/UniversityForm";
-import { EditingDialog } from "../common/EditingDialog";
 import type { Course } from "@/types/course";
+import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
+import { CourseForm } from "../forms/CourseForm";
 
-async function getCourses(uni): Promise<Course[]> {
+async function getCourses(uni: string): Promise<Course[]> {
   return await ky("http://localhost:8080/api/universities/" + uni + "/courses/").json<Course[]>();
 }
 
@@ -27,7 +27,7 @@ export function CoursesTable() {
   const params = useParams();
 
   useEffect(() => {
-    getCourses(params.UniID)
+    getCourses(params.UniID!)
       .then(data => setCourses(data))
       .catch(error => console.error("Failed to fetch universities:", error));
   }, []);
@@ -55,7 +55,7 @@ export function CoursesTable() {
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={e => e.stopPropagation()}>
-                      <EditingDialog CustomForm={UniversityForm} />
+                      <EditingDialog data={course} CustomForm={CourseForm} />
                     </span>
                     <span onClick={e => e.stopPropagation()}>
                       <DeleteDialog />
@@ -66,7 +66,7 @@ export function CoursesTable() {
             ))}
           </TableBody>
         </Table>
-      </div >
+      </div>
     </>
   );
 }

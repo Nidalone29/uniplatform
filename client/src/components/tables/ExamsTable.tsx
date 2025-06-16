@@ -11,24 +11,26 @@ import ky from 'ky';
 import { useParams } from "react-router";
 import { useEffect, useState } from 'react';
 
-import { UniversityForm } from "../forms/UniversityForm";
-import { EditingDialog } from "../common/EditingDialog";
 import type { Exam } from "@/types/exam";
-import { DeleteDialog } from "../common/DeleteDialog";
 
-async function getExams(uni, course): Promise<Exam[]> {
+import { EditingDialog } from "../common/EditingDialog";
+import { DeleteDialog } from "../common/DeleteDialog";
+import { ModifyExamForm } from "../forms/ModifyExamForm";
+
+async function getExams(uni: string, course: string): Promise<Exam[]> {
   return await ky("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/").json<Exam[]>();
 }
 
 export function ExamsTable() {
   const [exams, setExams] = useState<Exam[]>([]);
-
   const params = useParams();
+  const university: string = params.UniID!;
+  const course: string = params.CourseID!;
 
   useEffect(() => {
-    getExams(params.UniID, params.CourseID)
+    getExams(university, course)
       .then(data => setExams(data))
-      .catch(error => console.error("Failed to fetch universities:", error));
+      .catch(error => console.error("Failed to fetch exams:", error));
   }, []);
 
   return (
@@ -50,7 +52,7 @@ export function ExamsTable() {
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={e => e.stopPropagation()}>
-                      <EditingDialog CustomForm={UniversityForm} />
+                      <EditingDialog data={exam} CustomForm={ModifyExamForm} />
                     </span>
                     <span onClick={e => e.stopPropagation()}>
                       <DeleteDialog />
