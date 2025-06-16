@@ -4,14 +4,17 @@ import me.nidalone.uniplatform.domain.entities.Course;
 import me.nidalone.uniplatform.domain.entities.Exam;
 import me.nidalone.uniplatform.domain.entities.University;
 import me.nidalone.uniplatform.exceptions.CourseNotFoundException;
+import me.nidalone.uniplatform.exceptions.ExamAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.ExamNotFoundException;
 import me.nidalone.uniplatform.exceptions.UniNotFoundException;
 import me.nidalone.uniplatform.repositories.CourseRepository;
 import me.nidalone.uniplatform.repositories.ExamRepository;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
+import me.nidalone.uniplatform.utils.SlugUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DefaultExamService implements ExamService {
@@ -68,7 +71,11 @@ public class DefaultExamService implements ExamService {
             .findByUniAndSlug(university, courseSlug)
             .orElseThrow(() -> new CourseNotFoundException(courseSlug));
 
-    // TODO check if exam already exists
+    Optional<Exam> exam = examRepository.findByCourseAndSlug(course, SlugUtil.toSlug(examName));
+    if (exam.isPresent()) {
+      throw new ExamAlreadyExistsException(university.getName(), course.getName(), examName);
+    }
+
     course.addExam(new Exam(examName, 0, course));
     courseRepository.save(course);
   }

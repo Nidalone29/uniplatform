@@ -2,13 +2,16 @@ package me.nidalone.uniplatform.services;
 
 import me.nidalone.uniplatform.domain.entities.Course;
 import me.nidalone.uniplatform.domain.entities.University;
+import me.nidalone.uniplatform.exceptions.CourseAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.CourseNotFoundException;
 import me.nidalone.uniplatform.exceptions.UniNotFoundException;
 import me.nidalone.uniplatform.repositories.CourseRepository;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
+import me.nidalone.uniplatform.utils.SlugUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DefaultCourseService implements CourseService {
@@ -49,7 +52,12 @@ public class DefaultCourseService implements CourseService {
             .findBySlug(universitySlug)
             .orElseThrow(() -> new UniNotFoundException(universitySlug));
 
-    // TODO check if course already exists
+    Optional<Course> course =
+        courseRepository.findByUniAndSlug(university, SlugUtil.toSlug(courseName));
+    if (course.isPresent()) {
+      throw new CourseAlreadyExistsException(university.getName(), courseName);
+    }
+
     university.addCourse(new Course(courseName, university));
     universityRepository.save(university);
   }
