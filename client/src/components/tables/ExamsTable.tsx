@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { UniversityForm } from "../forms/UniversityForm";
 import { EditingDialog } from "../common/EditingDialog";
 import type { Exam } from "@/types/exam";
+import { DeleteDialog } from "../common/DeleteDialog";
 
 async function getExams(uni, course): Promise<Exam[]> {
   return await ky("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/").json<Exam[]>();
@@ -32,13 +33,13 @@ export function ExamsTable() {
 
   return (
     <>
-      <div className="flex m-2 align-middle content-center justify-center bg-card">
+      <div className="flex m-2 align-middle content-center justify-center">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-card">
             <TableRow>
-              <TableHead className="w-[100px]">University name</TableHead>
-              <TableHead>Courses</TableHead>
-              <TableHead>Edit</TableHead>
+              <TableHead className="w-[100px]">Exam name</TableHead>
+              <TableHead>ETCS</TableHead>
+              <TableHead className="w-[104px] text-center">Edit</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -47,9 +48,14 @@ export function ExamsTable() {
                 <TableCell className="font-medium">{exam.name}</TableCell>
                 <TableCell>{exam.ects}</TableCell>
                 <TableCell>
-                  <span onClick={e => e.stopPropagation()}>
-                    <EditingDialog CustomForm={UniversityForm} />
-                  </span>
+                  <div className="flex justify-end space-x-2">
+                    <span onClick={e => e.stopPropagation()}>
+                      <EditingDialog CustomForm={UniversityForm} />
+                    </span>
+                    <span onClick={e => e.stopPropagation()}>
+                      <DeleteDialog />
+                    </span>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

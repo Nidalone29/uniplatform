@@ -9,31 +9,25 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { type ComponentWithDialogControlProps } from "../../types/formTypes";
-import { SquarePen } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
-interface EditingDialogProps {
-  CustomForm: React.ComponentType<ComponentWithDialogControlProps>;
-}
-
-export function EditingDialog({ CustomForm }: EditingDialogProps) {
+export function DeleteDialog() {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
-        <Button className="items-center gap-2 md:flex-row" variant="secondary"><SquarePen /></Button>
+        <Button className="items-center gap-2 md:flex-row" variant="destructive"><Trash2 /></Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>
         </DialogHeader>
-        <CustomForm closingFunct={setOpenDialog} />
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit" form="uniform">Submit</Button>
+          <Button type="submit">Delete</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
