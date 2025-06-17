@@ -7,34 +7,34 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import ky from 'ky';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 
-import type { Course } from "@/types/course";
 import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
 import { CourseForm } from "../forms/CourseForm";
-
-async function getCourses(uni: string): Promise<Course[]> {
-  return await ky("http://localhost:8080/api/universities/" + uni + "/courses/").json<Course[]>();
-}
+import { Button } from "../ui/button";
+import { useEffect, useState } from "react";
+import type { Course } from "@/types/course";
+import type { loadDataCourse } from "@/api/loadData";
 
 export function CoursesTable() {
-  const [courses, setCourses] = useState<Course[]>([]);
+  const { university, courses } = useLoaderData<typeof loadDataCourse>();
+  const [coursesState, setCourses] = useState<Course[]>([]);
+
   const navigate = useNavigate();
 
-  const params = useParams();
-
   useEffect(() => {
-    getCourses(params.UniID!)
-      .then(data => setCourses(data))
-      .catch(error => console.error("Failed to fetch universities:", error));
-  }, []);
+    setCourses(courses!);
+  }, [courses]);
 
   return (
-    <>
+    <div>
+      <div className="flex m-2 align-middle content-center justify-between">
+        <div className="align-middle font-medium">{university!.name}</div>
+        <Button className="align-right">Add Exam</Button>
+      </div>
       <div className="flex m-2 align-middle content-center justify-center">
+
         <Table className="w-full table-fixed">
           <TableHeader className="bg-card">
             <TableRow>
@@ -44,7 +44,7 @@ export function CoursesTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {courses.map(course => (
+            {coursesState.map(course => (
               <TableRow onClick={() => {
                 navigate(`${course.slug}`, { viewTransition: true });
               }}>
@@ -67,6 +67,6 @@ export function CoursesTable() {
           </TableBody>
         </Table>
       </div>
-    </>
+    </div>
   );
 }

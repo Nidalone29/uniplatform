@@ -6,32 +6,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "../ui/button";
 
-import ky from 'ky';
-import { useEffect, useState } from 'react';
-import { useNavigate } from "react-router";
-
-import type { University } from '@/types/university';
+import { useLoaderData, useNavigate } from "react-router";
 import { UniversityForm } from "../forms/UniversityForm";
 import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
-
-async function getUniversities(): Promise<University[]> {
-  return await ky('http://localhost:8080/api/universities/').json<University[]>();
-}
+import type { loadDataUni } from "@/api/loadData";
 
 export function UniversitiesTable() {
-  const [universities, setUniversities] = useState<University[]>([]);
+  const { universities } = useLoaderData<typeof loadDataUni>();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getUniversities()
-      .then(data => setUniversities(data))
-      .catch(error => console.error("Failed to fetch universities:", error));
-  }, []);
-
   return (
-    <>
+    <div>
+      <div className="flex m-2 align-middle content-center justify-between">
+        <div className="align-middle font-medium"></div>
+        <Button className="align-right">Add University</Button>
+      </div>
       <div className="flex m-2 align-middle content-center justify-center">
         <Table>
           <TableHeader className="bg-card">
@@ -42,7 +34,7 @@ export function UniversitiesTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {universities.map(uni => (
+            {universities!.map(uni => (
               <TableRow onClick={() => {
                 navigate(`/${uni.slug}`, { viewTransition: true });
               }}>
@@ -64,7 +56,7 @@ export function UniversitiesTable() {
             ))}
           </TableBody>
         </Table>
-      </div >
-    </>
+      </div>
+    </div>
   );
 }

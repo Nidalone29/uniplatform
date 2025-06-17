@@ -6,49 +6,39 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
-import ky from 'ky';
-import { useParams } from "react-router";
+import { useLoaderData } from "react-router";
 import { useEffect, useState } from 'react';
 
 import type { Exam } from "@/types/exam";
 import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
 import { ModifyExamForm } from "../forms/ModifyExamForm";
-
-async function getAllExams(uni: string, course: string): Promise<Exam[]> {
-  return await ky("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/").json<Exam[]>();
-}
-
-async function getExam(uni: string, course: string, exam: string): Promise<Exam> {
-  return await ky("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/" + exam).json<Exam>();
-}
+import { getExam } from "@/api/apiCalls";
+import type { loadDataExam } from "@/api/loadData";
 
 export function ExamsTable() {
-  const [exams, setExams] = useState<Exam[]>([]);
-  const params = useParams();
-  const university: string = params.UniID!;
-  const course: string = params.CourseID!;
+  const { university, course, exams } = useLoaderData<typeof loadDataExam>();
+  const [examsState, setExams] = useState<Exam[]>([]);
 
   useEffect(() => {
-    getAllExams(university, course)
-      .then(data => setExams(data))
-      .catch(error => console.error("Failed to fetch exams:", error));
-  }, []);
+    setExams(exams);
+  }, [exams]);
 
   async function updateData(e: Exam) {
-    const updatedExam = await getExam(university, course, e.slug);
-    setExams(exams.map((exam) => {
-      if (exam === e) {
-        return updatedExam;
-      } else {
-        return exam;
-      }
+    const updatedExam: Exam = await getExam(university!.slug, course!.slug, e.slug);
+    setExams(examsState.map((exam) => {
+      return (exam === e) ? updatedExam : exam;
     }));
   }
 
   return (
-    <>
+    <div>
+      <div className="flex m-2 align-middle content-center justify-between">
+        <div className="align-middle font-medium">{course!.name} course at {university!.name}</div>
+        <Button className="align-right">Add Exam</Button>
+      </div>
       <div className="flex m-2 align-middle content-center justify-center">
         <Table>
           <TableHeader className="bg-card">
@@ -59,7 +49,7 @@ export function ExamsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {exams.map(exam => (
+            {examsState.map(exam => (
               <TableRow>
                 <TableCell className="font-medium">{exam.name}</TableCell>
                 <TableCell>{exam.ects}</TableCell>
@@ -78,6 +68,6 @@ export function ExamsTable() {
           </TableBody>
         </Table>
       </div>
-    </>
+    </div>
   );
 }

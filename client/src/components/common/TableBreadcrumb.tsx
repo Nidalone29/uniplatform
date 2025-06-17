@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Link, useMatches } from "react-router";
 
-
 export function TableBreadcrumb() {
   const matches = useMatches();
 

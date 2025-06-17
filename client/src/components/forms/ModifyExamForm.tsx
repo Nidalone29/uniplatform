@@ -11,11 +11,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import ky from "ky";
 import { useParams } from "react-router";
 
 import type { Exam } from "@/types/exam";
 import type { FormInDialogProps } from "@/types/formTypes";
+import { updateExam } from "@/api/apiCalls";
 
 // TODO the schemas will all be eventually generated via https://github.com/orval-labs/orval
 const FormSchema = z.object({
@@ -27,11 +27,6 @@ const FormSchema = z.object({
     }),
 })
 
-async function updateExam(uni: string, course: string, exam: string, ects: number) {
-  const sp = new URLSearchParams();
-  sp.set("ects", "" + ects);
-  return await ky.put("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/" + exam + "/update_ects", { searchParams: sp });
-}
 
 export function ModifyExamForm({ formData, closingFunct, reFetchUpdatedData }: FormInDialogProps<Exam>) {
   const params = useParams();
