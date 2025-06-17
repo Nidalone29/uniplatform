@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
               {
                 index: true,
                 Component: CoursesTable,
-                loader: async ({ params }) => await loadDataCourse(params.UniID!),
+                loader: ({ params }) => loadDataCourse(params.UniID!),
                 HydrateFallback: TableDataSkeleton,
               },
               {

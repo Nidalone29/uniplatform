@@ -23,7 +23,7 @@ export function ExamsTable() {
   const [examsState, setExams] = useState<Exam[]>([]);
 
   useEffect(() => {
-    setExams(exams);
+    setExams(exams!);
   }, [exams]);
 
   async function updateData(e: Exam) {
