@@ -8,5 +8,6 @@ export type Entities = University | Course | Exam;
 // Uni/Course/Exam...
 export interface FormInDialogProps<T extends Entities> {
   formData: T,
-  closingFunct: (open: boolean) => void;
+  closingFunct: (open: boolean) => void,
+  reFetchUpdatedData?: (updatedData: T) => void;
 }

@@ -33,11 +33,12 @@ async function updateExam(uni: string, course: string, exam: string, ects: numbe
   return await ky.put("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/" + exam + "/update_ects", { searchParams: sp });
 }
 
-export function ModifyExamForm({ formData, closingFunct }: FormInDialogProps<Exam>) {
+export function ModifyExamForm({ formData, closingFunct, reFetchUpdatedData }: FormInDialogProps<Exam>) {
   const params = useParams();
   const university: string = params.UniID!;
   const course: string = params.CourseID!;
   const exam: Exam = formData;
+  const reFetchExam: (updatedData: Exam) => void = reFetchUpdatedData!;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -50,11 +51,12 @@ export function ModifyExamForm({ formData, closingFunct }: FormInDialogProps<Exa
     closingFunct(false);
     updateExam(university, course, exam.slug, data.ects)
       .then(() => (
-        toast.success("Exam Updated Successfully", { duration: 2000 /*2 seconds*/ })
-        // TODO trigger refetch, of just the modified exam not the entire table
+        toast.success("Exam Updated Successfully", { duration: 2000 /*2 seconds*/ }),
+        reFetchExam(exam)
       ))
-      .catch(() => (
-        toast.error("Error", { duration: 2000 /*2 seconds*/ })
+      .catch((error) => (
+        console.log(error),
+        toast.error("Error", { duration: 2000 })
       ));
   }
 

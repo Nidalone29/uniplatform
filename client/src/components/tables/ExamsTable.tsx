@@ -12,13 +12,16 @@ import { useParams } from "react-router";
 import { useEffect, useState } from 'react';
 
 import type { Exam } from "@/types/exam";
-
 import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
 import { ModifyExamForm } from "../forms/ModifyExamForm";
 
-async function getExams(uni: string, course: string): Promise<Exam[]> {
+async function getAllExams(uni: string, course: string): Promise<Exam[]> {
   return await ky("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/").json<Exam[]>();
+}
+
+async function getExam(uni: string, course: string, exam: string): Promise<Exam> {
+  return await ky("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/" + exam).json<Exam>();
 }
 
 export function ExamsTable() {
@@ -28,10 +31,21 @@ export function ExamsTable() {
   const course: string = params.CourseID!;
 
   useEffect(() => {
-    getExams(university, course)
+    getAllExams(university, course)
       .then(data => setExams(data))
       .catch(error => console.error("Failed to fetch exams:", error));
   }, []);
+
+  async function updateData(e: Exam) {
+    const updatedExam = await getExam(university, course, e.slug);
+    setExams(exams.map((exam) => {
+      if (exam === e) {
+        return updatedExam;
+      } else {
+        return exam;
+      }
+    }));
+  }
 
   return (
     <>
@@ -52,7 +66,7 @@ export function ExamsTable() {
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={e => e.stopPropagation()}>
-                      <EditingDialog data={exam} CustomForm={ModifyExamForm} />
+                      <EditingDialog data={exam} CustomForm={ModifyExamForm} updateFunct={updateData} />
                     </span>
                     <span onClick={e => e.stopPropagation()}>
                       <DeleteDialog />

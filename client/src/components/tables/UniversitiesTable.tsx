@@ -12,7 +12,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router";
 
 import type { University } from '@/types/university';
-
 import { UniversityForm } from "../forms/UniversityForm";
 import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
@@ -33,7 +32,7 @@ export function UniversitiesTable() {
 
   return (
     <>
-      <div className="flex m-2 align-middle content-center justify-center ">
+      <div className="flex m-2 align-middle content-center justify-center">
         <Table>
           <TableHeader className="bg-card">
             <TableRow>
