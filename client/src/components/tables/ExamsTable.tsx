@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 
 import { useLoaderData } from "react-router";
 import { useEffect, useState } from 'react';
@@ -26,8 +25,8 @@ export function ExamsTable() {
     setExams(exams!);
   }, [exams]);
 
-  async function updateData(e: Exam) {
-    const updatedExam: Exam = await getExam(university!.slug, course!.slug, e.slug);
+  async function updateData(e?: Exam) {
+    const updatedExam: Exam = await getExam(university!.slug, course!.slug, e!.slug);
     setExams(examsState.map((exam) => {
       return (exam === e) ? updatedExam : exam;
     }));
@@ -37,7 +36,6 @@ export function ExamsTable() {
     <div>
       <div className="flex m-2 align-middle content-center justify-between">
         <div className="align-middle font-medium">{course!.name} course at {university!.name}</div>
-        <Button className="align-right">Add Exam</Button>
       </div>
       <div className="flex m-2 align-middle content-center justify-center">
         <Table>

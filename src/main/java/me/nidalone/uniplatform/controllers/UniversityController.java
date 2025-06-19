@@ -63,7 +63,7 @@ public class UniversityController {
     // at this point if there are not any throws the entity has been created
     String slug = university.getSlug();
     return ResponseEntity.created(
-            ServletUriComponentsBuilder.fromCurrentRequest()
+            ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{slug}")
                 .buildAndExpand(slug)
                 .toUri())

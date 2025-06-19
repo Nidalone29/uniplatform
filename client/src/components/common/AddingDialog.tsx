@@ -9,34 +9,33 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { SquarePen } from "lucide-react";
 
 import { type Entities, type FormInDialogProps } from "@/types/formTypes";
 
 interface EditingDialogProps<T extends Entities> {
-  data: T, // just a passthrough,
+  data?: T, // just a passthrough,
   updateFunct?: (updatedData?: T) => void; // just a passthrough,
   CustomForm: React.ComponentType<FormInDialogProps<T>>;
 }
 
-export function EditingDialog<T extends Entities>({ data, CustomForm, updateFunct }: EditingDialogProps<T>) {
+export function AddingDialog<T extends Entities>({ CustomForm, updateFunct }: EditingDialogProps<T>) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
-        <Button className="items-center gap-2 md:flex-row" variant="secondary"><SquarePen /></Button>
+        <Button className="align-right">Add</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Editing {data.name /* this works because we know that every entity has the property "name" */}</DialogTitle>
+          <DialogTitle>Creating a new entity</DialogTitle>
         </DialogHeader>
-        <CustomForm formData={data} closingFunct={setOpenDialog} reFetchUpdatedData={updateFunct} />
+        <CustomForm closingFunct={setOpenDialog} reFetchUpdatedData={updateFunct} />
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit" form="uniform">Submit</Button>
+          <Button type="submit" form="add-university-form">Submit</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

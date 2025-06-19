@@ -12,17 +12,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import type { Course } from "@/types/course";
+import type { University } from "@/types/university";
 import type { FormInDialogProps } from "@/types/formTypes";
+import { addUniversity } from "@/api/apiCalls";
 
 // TODO the schemas will all be eventually generated via https://github.com/orval-labs/orval
 const FormSchema = z.object({
   name: z.string().min(2, {
-    message: "course name must be at least 2 characters.",
+    message: "University name must be at least 2 characters.",
   }),
 })
 
-export function CourseForm({ closingFunct }: FormInDialogProps<Course>) {
+export function AddUniversityForm({ closingFunct, reFetchUpdatedData }: FormInDialogProps<University>) {
+  const reFetchUniversities: () => void = reFetchUpdatedData!;
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -30,24 +33,24 @@ export function CourseForm({ closingFunct }: FormInDialogProps<Course>) {
     },
   })
 
-  // TODO finish form by making the HTTP request and adding toast.success() + close or toast.error() based 
-  // on the server response (such as a UniAlreadyExists?)
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    closingFunct(false);
-    console.log("form submitted!!!")
-    toast.success("You submitted the following values", {
-      description: (
-        <pre className="mt-2 w-full rounded-md p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      duration: 2000, // 2 seconds
-    })
+    const uniData = new URLSearchParams(); // application/x-www-form-urlencoded
+    uniData.set("name", data.name);
+    addUniversity(uniData)
+      .then(() => (
+        toast.success("Exam Updated Successfully", { duration: 2000 }),
+        reFetchUniversities(),
+        closingFunct(false)
+      ))
+      .catch((error) => (
+        console.log(error),
+        toast.error("Error", { duration: 2000 })
+      ));
   }
 
   return (
     <Form {...form}>
-      <form id="uniform" onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form id="add-university-form" onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
         <FormField
           control={form.control}
           name="name"

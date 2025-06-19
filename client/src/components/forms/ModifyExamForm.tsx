@@ -16,33 +16,23 @@ import { useParams } from "react-router";
 import type { Exam } from "@/types/exam";
 import type { FormInDialogProps } from "@/types/formTypes";
 import { updateExam } from "@/api/apiCalls";
-
-// TODO the schemas will all be eventually generated via https://github.com/orval-labs/orval
-const FormSchema = z.object({
-  ects: z.coerce.number().int()
-    .min(1, {
-      message: "Exam need to give at least 1 credit.",
-    })
-    .max(30, {
-      message: "Exams can't give more than 30 credits."
-    }),
-})
+import { ModifyExamFormSchema } from "@/api/schemas";
 
 export function ModifyExamForm({ formData, closingFunct, reFetchUpdatedData }: FormInDialogProps<Exam>) {
   const params = useParams();
   const university: string = params.UniID!;
   const course: string = params.CourseID!;
-  const exam: Exam = formData;
+  const exam: Exam = formData!;
   const reFetchExam: (updatedData: Exam) => void = reFetchUpdatedData!;
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof ModifyExamFormSchema>>({
+    resolver: zodResolver(ModifyExamFormSchema),
     defaultValues: {
       ects: exam.ects,
     },
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(data: z.infer<typeof ModifyExamFormSchema>) {
     closingFunct(false);
     updateExam(university, course, exam.slug, data.ects)
       .then(() => (

@@ -11,7 +11,7 @@ import { useLoaderData, useNavigate } from "react-router";
 
 import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
-import { CourseForm } from "../forms/CourseForm";
+import { ModifyCourseForm } from "../forms/ModifyCourseForm";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import type { Course } from "@/types/course";
@@ -52,7 +52,7 @@ export function CoursesTable() {
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={e => e.stopPropagation()}>
-                      <EditingDialog data={course} CustomForm={CourseForm} />
+                      <EditingDialog data={course} CustomForm={ModifyCourseForm} />
                     </span>
                     <span onClick={e => e.stopPropagation()}>
                       <DeleteDialog />

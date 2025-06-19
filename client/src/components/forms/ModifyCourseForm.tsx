@@ -12,17 +12,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import type { University } from "@/types/university";
+import type { Course } from "@/types/course";
 import type { FormInDialogProps } from "@/types/formTypes";
 
 // TODO the schemas will all be eventually generated via https://github.com/orval-labs/orval
 const FormSchema = z.object({
   name: z.string().min(2, {
-    message: "university name must be at least 2 characters.",
+    message: "course name must be at least 2 characters.",
   }),
 })
 
-export function UniversityForm({ closingFunct }: FormInDialogProps<University>) {
+export function ModifyCourseForm({ closingFunct }: FormInDialogProps<Course>) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

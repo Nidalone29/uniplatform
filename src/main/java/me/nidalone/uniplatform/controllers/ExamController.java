@@ -79,7 +79,7 @@ public class ExamController {
     examService.addNewExam(universitySlug, courseSlug, exam);
     String slug = exam.getSlug();
     return ResponseEntity.created(
-            ServletUriComponentsBuilder.fromCurrentRequest()
+            ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{slug}")
                 .buildAndExpand(slug)
                 .toUri())
