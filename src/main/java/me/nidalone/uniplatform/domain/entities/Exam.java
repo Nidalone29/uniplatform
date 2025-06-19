@@ -36,11 +36,6 @@ public class Exam {
     this.course = course;
   }
 
-  public Exam(String name) {
-    this.name = name;
-    this.slug = SlugUtil.toSlug(name);
-  }
-
   public Exam() {}
 
   public UUID getExamID() {

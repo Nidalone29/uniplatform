@@ -1,6 +1,8 @@
 package me.nidalone.uniplatform.mappers;
 
-import me.nidalone.uniplatform.domain.dto.ExamDTO;
+import me.nidalone.uniplatform.domain.dto.ExamCreationDTO;
+import me.nidalone.uniplatform.domain.dto.ExamDataDTO;
+import me.nidalone.uniplatform.domain.entities.Course;
 import me.nidalone.uniplatform.domain.entities.Exam;
 import org.springframework.stereotype.Component;
 
@@ -8,17 +10,12 @@ import org.springframework.stereotype.Component;
 public class DefaultExamMapper implements ExamMapper {
 
   @Override
-  public Exam fromDTO(ExamDTO examDTO) {
-
-    return new Exam(examDTO.name(), examDTO.ects(), null);
+  public Exam fromCreationDTO(ExamCreationDTO examCreationDTO, Course course) {
+    return new Exam(examCreationDTO.name(), examCreationDTO.ects(), course);
   }
 
   @Override
-  public ExamDTO toDTO(Exam exam) {
-    if (exam == null) {
-      return null;
-    }
-
-    return new ExamDTO(exam.getName(), exam.getSlug(), exam.getEcts());
+  public ExamDataDTO toDataDTO(Exam exam) {
+    return new ExamDataDTO(exam.getName(), exam.getSlug(), exam.getEcts());
   }
 }

@@ -2,10 +2,11 @@ package me.nidalone.uniplatform.controllers;
 
 import java.util.List;
 
-import me.nidalone.uniplatform.domain.dto.UniversityDTO;
+import me.nidalone.uniplatform.domain.dto.UniversityCreationDTO;
+import me.nidalone.uniplatform.domain.dto.UniversityDataDTO;
+import me.nidalone.uniplatform.domain.entities.University;
 import me.nidalone.uniplatform.mappers.UniversityMapper;
 import me.nidalone.uniplatform.services.UniversityService;
-import me.nidalone.uniplatform.utils.SlugUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,9 +30,9 @@ public class UniversityController {
    * @return University object if found, otherwise throw UniversityNotFoundException
    */
   @GetMapping(path = "/{universitySlug}")
-  public ResponseEntity<UniversityDTO> getUniversity(@PathVariable String universitySlug) {
+  public ResponseEntity<UniversityDataDTO> getUniversity(@PathVariable String universitySlug) {
     return ResponseEntity.ok()
-        .body(universityMapper.toDTO(universityService.getUniversityBySlug(universitySlug)));
+        .body(universityMapper.toDataDTO(universityService.getUniversityBySlug(universitySlug)));
   }
 
   /**
@@ -40,22 +41,27 @@ public class UniversityController {
    * @return All universities present in the database
    */
   @GetMapping(path = "/")
-  public ResponseEntity<List<UniversityDTO>> getAllUniversities() {
+  public ResponseEntity<List<UniversityDataDTO>> getAllUniversities() {
     return ResponseEntity.ok()
         .body(
-            universityService.getAllUniversities().stream().map(universityMapper::toDTO).toList());
+            universityService.getAllUniversities().stream()
+                .map(universityMapper::toDataDTO)
+                .toList());
   }
 
   /**
-   * Add a new university to the database by name
+   * Add a new university to the database
    *
-   * @param name University name to add
+   * @param universityCreationDTO to add
    * @return Success message or throw UniAlreadyExistsException
    */
   @PostMapping(path = "/")
-  public ResponseEntity<String> addNewUniversity(@RequestParam String name) {
-    universityService.addNewUniversity(name);
-    String slug = SlugUtil.toSlug(name);
+  public ResponseEntity<String> addNewUniversity(
+      @ModelAttribute UniversityCreationDTO universityCreationDTO) {
+    University university = universityMapper.fromCreationDTO(universityCreationDTO);
+    universityService.addNewUniversity(university);
+    // at this point if there are not any throws the entity has been created
+    String slug = university.getSlug();
     return ResponseEntity.created(
             ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{slug}")

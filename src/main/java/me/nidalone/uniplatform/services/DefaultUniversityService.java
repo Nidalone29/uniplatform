@@ -4,7 +4,6 @@ import me.nidalone.uniplatform.domain.entities.University;
 import me.nidalone.uniplatform.exceptions.UniAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.UniNotFoundException;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
-import me.nidalone.uniplatform.utils.SlugUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,13 +30,22 @@ public class DefaultUniversityService implements UniversityService {
   }
 
   @Override
-  public void addNewUniversity(String universityName) {
-    Optional<University> uni = universityRepository.findBySlug(SlugUtil.toSlug(universityName));
-    if (uni.isPresent()) {
-      throw new UniAlreadyExistsException(universityName);
+  public void addNewUniversity(University university) {
+    if (university.getName().isEmpty()) {
+      throw new IllegalArgumentException();
     }
 
-    universityRepository.save(new University(universityName));
+    if (university.getSlug().isEmpty()) {
+      // It means that the university was created with no parameters somehow
+      throw new RuntimeException();
+    }
+
+    Optional<University> uni = universityRepository.findBySlug(university.getSlug());
+    if (uni.isPresent()) {
+      throw new UniAlreadyExistsException(university.getName());
+    }
+
+    universityRepository.save(university);
   }
 
   @Override

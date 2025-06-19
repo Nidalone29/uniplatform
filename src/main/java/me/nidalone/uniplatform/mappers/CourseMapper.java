@@ -1,11 +1,13 @@
 package me.nidalone.uniplatform.mappers;
 
-import me.nidalone.uniplatform.domain.dto.CourseDTO;
+import me.nidalone.uniplatform.domain.dto.CourseCreationDTO;
+import me.nidalone.uniplatform.domain.dto.CourseDataDTO;
 import me.nidalone.uniplatform.domain.entities.Course;
+import me.nidalone.uniplatform.domain.entities.University;
 
 public interface CourseMapper {
 
-  Course fromDTO(CourseDTO courseDTO);
+  Course fromCreationDTO(CourseCreationDTO courseCreationDTO, University university);
 
-  CourseDTO toDTO(Course course);
+  CourseDataDTO toDataDTO(Course course);
 }

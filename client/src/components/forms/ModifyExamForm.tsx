@@ -22,11 +22,11 @@ const FormSchema = z.object({
   ects: z.coerce.number().int()
     .min(1, {
       message: "Exam need to give at least 1 credit.",
-    }).max(30, {
+    })
+    .max(30, {
       message: "Exams can't give more than 30 credits."
     }),
 })
-
 
 export function ModifyExamForm({ formData, closingFunct, reFetchUpdatedData }: FormInDialogProps<Exam>) {
   const params = useParams();

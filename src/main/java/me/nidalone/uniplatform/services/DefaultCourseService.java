@@ -4,6 +4,7 @@ import me.nidalone.uniplatform.domain.entities.Course;
 import me.nidalone.uniplatform.domain.entities.University;
 import me.nidalone.uniplatform.exceptions.CourseAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.CourseNotFoundException;
+import me.nidalone.uniplatform.exceptions.UniAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.UniNotFoundException;
 import me.nidalone.uniplatform.repositories.CourseRepository;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
@@ -25,7 +26,7 @@ public class DefaultCourseService implements CourseService {
   }
 
   @Override
-  public Course getCourse(String universitySlug, String courseSlug) {
+  public Course getCourseBySlug(String universitySlug, String courseSlug) {
     University university =
         universityRepository
             .findBySlug(universitySlug)
@@ -46,20 +47,29 @@ public class DefaultCourseService implements CourseService {
   }
 
   @Override
-  public void addCourse(String universitySlug, String courseName) {
+  public void addCourse(String universitySlug, Course course) {
+    if (course.getName().isEmpty()) {
+      throw new IllegalArgumentException();
+    }
+
+    if (course.getSlug().isEmpty()) {
+      // It means that the course was created with no parameters somehow
+      throw new RuntimeException();
+    }
+
     University university =
         universityRepository
             .findBySlug(universitySlug)
             .orElseThrow(() -> new UniNotFoundException(universitySlug));
 
-    Optional<Course> course =
-        courseRepository.findByUniAndSlug(university, SlugUtil.toSlug(courseName));
-    if (course.isPresent()) {
-      throw new CourseAlreadyExistsException(university.getName(), courseName);
+    Optional<Course> c = courseRepository.findByUniAndSlug(university, course.getSlug());
+    if (c.isPresent()) {
+      throw new CourseAlreadyExistsException(university.getName(), course.getName());
     }
 
-    university.addCourse(new Course(courseName, university));
-    universityRepository.save(university);
+    courseRepository.save(course);
+    // university.addCourse(new Course(courseName, university));
+    // universityRepository.save(university);
   }
 
   @Override

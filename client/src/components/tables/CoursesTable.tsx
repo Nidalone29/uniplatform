@@ -31,15 +31,14 @@ export function CoursesTable() {
     <div>
       <div className="flex m-2 align-middle content-center justify-between">
         <div className="align-middle font-medium">{university!.name}</div>
-        <Button className="align-right">Add Exam</Button>
+        <Button className="align-right">Add Course</Button>
       </div>
       <div className="flex m-2 align-middle content-center justify-center">
-
         <Table className="w-full table-fixed">
           <TableHeader className="bg-card">
             <TableRow>
               <TableHead className="w-[100px]">Course name</TableHead>
-              <TableHead>Exams</TableHead>
+              <TableHead></TableHead>
               <TableHead className="w-[104px] text-center">Edit</TableHead>
             </TableRow>
           </TableHeader>
@@ -49,9 +48,7 @@ export function CoursesTable() {
                 navigate(`${course.slug}`, { viewTransition: true });
               }}>
                 <TableCell className="font-medium">{course.name}</TableCell>
-                <TableCell>{course.exams.map(exam => (
-                  exam.name + ", "
-                ))}</TableCell>
+                <TableCell></TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={e => e.stopPropagation()}>

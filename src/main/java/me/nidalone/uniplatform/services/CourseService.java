@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface CourseService {
 
-  Course getCourse(String universitySlug, String courseSlug);
+  Course getCourseBySlug(String universitySlug, String courseSlug);
 
   List<Course> getAllCourses(String universitySlug);
 
-  void addCourse(String universitySlug, String courseName);
+  void addCourse(String universitySlug, Course course);
 
   void removeCourse(String universitySlug, String courseSlug);
 }

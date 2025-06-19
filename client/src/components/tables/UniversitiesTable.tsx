@@ -29,7 +29,7 @@ export function UniversitiesTable() {
           <TableHeader className="bg-card">
             <TableRow>
               <TableHead className="w-[100px]">University name</TableHead>
-              <TableHead>Courses</TableHead>
+              <TableHead></TableHead>
               <TableHead className="w-[104px] text-center">Edit</TableHead>
             </TableRow>
           </TableHeader>
@@ -39,9 +39,7 @@ export function UniversitiesTable() {
                 navigate(`/${uni.slug}`, { viewTransition: true });
               }}>
                 <TableCell className="font-medium">{uni.name}</TableCell>
-                <TableCell>{uni.courses.map(course => (
-                  course.name + ", "
-                ))}</TableCell>
+                <TableCell></TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={e => e.stopPropagation()}>

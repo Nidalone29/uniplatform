@@ -1,11 +1,12 @@
 package me.nidalone.uniplatform.mappers;
 
-import me.nidalone.uniplatform.domain.dto.UniversityDTO;
+import me.nidalone.uniplatform.domain.dto.UniversityCreationDTO;
+import me.nidalone.uniplatform.domain.dto.UniversityDataDTO;
 import me.nidalone.uniplatform.domain.entities.University;
 
 public interface UniversityMapper {
 
-  University fromDTO(UniversityDTO universityDTO);
+  University fromCreationDTO(UniversityCreationDTO universityCreationDTO);
 
-  UniversityDTO toDTO(University university);
+  UniversityDataDTO toDataDTO(University university);
 }

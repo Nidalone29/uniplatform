@@ -11,7 +11,7 @@ public interface ExamService {
 
   List<Exam> getAllExams(String universitySlug, String courseSlug);
 
-  void addNewExam(String universitySlug, String courseSlug, String examName);
+  void addNewExam(String universitySlug, String courseSlug, Exam exam);
 
   void updateExamECTS(String universitySlug, String courseSlug, String examSlug, int ects);
 

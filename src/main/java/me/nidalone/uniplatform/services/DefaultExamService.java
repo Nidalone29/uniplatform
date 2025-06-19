@@ -61,7 +61,20 @@ public class DefaultExamService implements ExamService {
   }
 
   @Override
-  public void addNewExam(String universitySlug, String courseSlug, String examName) {
+  public void addNewExam(String universitySlug, String courseSlug, Exam exam) {
+    if (exam.getName().isEmpty()) {
+      throw new IllegalArgumentException();
+    }
+
+    if (exam.getSlug().isEmpty()) {
+      // It means that the exam was created with no parameters somehow
+      throw new RuntimeException();
+    }
+
+    if (exam.getEcts() < 1 || exam.getEcts() > 30) {
+      throw new IllegalArgumentException();
+    }
+
     University university =
         universityRepository
             .findBySlug(universitySlug)
@@ -71,13 +84,12 @@ public class DefaultExamService implements ExamService {
             .findByUniAndSlug(university, courseSlug)
             .orElseThrow(() -> new CourseNotFoundException(courseSlug));
 
-    Optional<Exam> exam = examRepository.findByCourseAndSlug(course, SlugUtil.toSlug(examName));
-    if (exam.isPresent()) {
-      throw new ExamAlreadyExistsException(university.getName(), course.getName(), examName);
+    Optional<Exam> e = examRepository.findByCourseAndSlug(course, exam.getSlug());
+    if (e.isPresent()) {
+      throw new ExamAlreadyExistsException(university.getName(), course.getName(), exam.getName());
     }
 
-    course.addExam(new Exam(examName, 0, course));
-    courseRepository.save(course);
+    examRepository.save(exam);
   }
 
   @Override

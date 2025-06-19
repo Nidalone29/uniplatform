@@ -10,7 +10,7 @@ public interface UniversityService {
 
   University getUniversityBySlug(String universitySlug);
 
-  void addNewUniversity(String universityName);
+  void addNewUniversity(University university);
 
   void deleteUniversityBySlug(String universityID);
 }
