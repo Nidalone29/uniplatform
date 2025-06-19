@@ -10,7 +10,6 @@ import me.nidalone.uniplatform.exceptions.UniNotFoundException;
 import me.nidalone.uniplatform.repositories.CourseRepository;
 import me.nidalone.uniplatform.repositories.ExamRepository;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
-import me.nidalone.uniplatform.utils.SlugUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
