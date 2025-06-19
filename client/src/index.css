@@ -117,4 +117,13 @@
   body {
     @apply bg-background text-foreground;
   }
+ 
+  /* reverting unnatural tailwind v4 decision https://github.com/shadcn-ui/ui/issues/6843 */
+  [role="button"],
+  button {
+    cursor: pointer;
+  }
+  :disabled {
+    cursor: default;
+  }
 }
