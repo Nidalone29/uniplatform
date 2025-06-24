@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 import {
   Form,
@@ -11,43 +10,35 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useParams } from "react-router";
 
-import type { Exam } from "@/types/exam";
+import { type Exam, EditExamFormSchema } from "@/types/exam";
 import type { FormInDialogProps } from "@/types/formTypes";
-import { updateExam } from "@/api/apiCalls";
-import { ModifyExamFormSchema } from "@/api/schemas";
+import { useFormFetcher } from "@/hooks/useFormFetcher";
+import { useEffect } from "react";
 
-export function ModifyExamForm({ formData, closingFunct, reFetchUpdatedData }: FormInDialogProps<Exam>) {
-  const params = useParams();
-  const university: string = params.UniID!;
-  const course: string = params.CourseID!;
-  const exam: Exam = formData!;
-  const reFetchExam: (updatedData: Exam) => void = reFetchUpdatedData!;
+export function ModifyExamForm({ formData, formId, closingFunct, formStateFunct }: FormInDialogProps<Exam>) {
+  const current_exam: Exam = formData!;
+  const { submissionState, submitFunction } = useFormFetcher(closingFunct);
 
-  const form = useForm<z.infer<typeof ModifyExamFormSchema>>({
-    resolver: zodResolver(ModifyExamFormSchema),
+  useEffect(() => {
+    formStateFunct!(submissionState)
+  }, [formStateFunct, submissionState]);
+
+  const form = useForm<z.infer<typeof EditExamFormSchema>>({
+    resolver: zodResolver(EditExamFormSchema),
     defaultValues: {
-      ects: exam.ects,
+      ects: current_exam.ects,
     },
   })
 
-  function onSubmit(data: z.infer<typeof ModifyExamFormSchema>) {
-    closingFunct(false);
-    updateExam(university, course, exam.slug, data.ects)
-      .then(() => (
-        toast.success("Exam Updated Successfully", { duration: 2000 /*2 seconds*/ }),
-        reFetchExam(exam)
-      ))
-      .catch((error) => (
-        console.log(error),
-        toast.error("Error", { duration: 2000 })
-      ));
+  function onSubmit(data: z.infer<typeof EditExamFormSchema>) {
+    formStateFunct!(true); // just for making this feel more "snappy"
+    submitFunction({ intent: "edit", slug: current_exam.slug, content: data }, { method: "POST", encType: "application/json" });
   }
 
   return (
     <Form {...form}>
-      <form id="uniform" onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
         <FormField
           control={form.control}
           name="ects"

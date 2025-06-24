@@ -52,7 +52,7 @@ export function CoursesTable() {
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={e => e.stopPropagation()}>
-                      <EditingDialog data={course} CustomForm={ModifyCourseForm} />
+                      <EditingDialog formId="edit-course" data={course} CustomForm={ModifyCourseForm} />
                     </span>
                     <span onClick={e => e.stopPropagation()}>
                       <DeleteDialog />

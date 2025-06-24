@@ -9,34 +9,32 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { SquarePen } from "lucide-react";
+import { Loader2Icon, SquarePen } from "lucide-react";
 
-import { type Entities, type FormInDialogProps } from "@/types/formTypes";
+import { type DialogProps, type Entities } from "@/types/formTypes";
 
-interface EditingDialogProps<T extends Entities> {
-  data: T, // just a passthrough,
-  updateFunct?: (updatedData?: T) => void; // just a passthrough,
-  CustomForm: React.ComponentType<FormInDialogProps<T>>;
-}
-
-export function EditingDialog<T extends Entities>({ data, CustomForm, updateFunct }: EditingDialogProps<T>) {
+export function EditingDialog<T extends Entities>({ formId, data, CustomForm }: DialogProps<T>) {
+  const current_data = data!;
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [formState, setFormState] = useState<boolean>(false);
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <Button className="items-center gap-2 md:flex-row" variant="secondary"><SquarePen /></Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent showCloseButton={!formState}>
         <DialogHeader>
-          <DialogTitle>Editing {data.name /* this works because we know that every entity has the property "name" */}</DialogTitle>
+          <DialogTitle>Editing {current_data.name /* this works because we know that every entity has the property "name" */}</DialogTitle>
         </DialogHeader>
-        <CustomForm formData={data} closingFunct={setOpenDialog} reFetchUpdatedData={updateFunct} />
+        <CustomForm formData={current_data} formId={formId} closingFunct={setOpenDialog} formStateFunct={setFormState} />
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit" form="uniform">Submit</Button>
+          <Button type="submit" form={formId} disabled={formState}>
+            Submit {formState ? <Loader2Icon className="animate-spin" /> : <></>}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

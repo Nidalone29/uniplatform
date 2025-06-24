@@ -32,8 +32,8 @@ export async function getExam(uni: string, course: string, exam: string): Promis
   return await ky.get("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/" + exam).json<Exam>();
 }
 
-export async function updateExam(uni: string, course: string, exam: string, ects: number) {
-  const sp = new URLSearchParams();
-  sp.set("ects", "" + ects);
-  return await ky.put("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/" + exam + "/update_ects", { searchParams: sp });
+export async function updateExam(uni: string, course: string, exam: string, search_params: URLSearchParams) {
+  return await ky.put("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/" + exam + "/update_ects",
+    { body: search_params }
+  );
 }

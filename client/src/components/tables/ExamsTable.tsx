@@ -8,29 +8,14 @@ import {
 } from "@/components/ui/table";
 
 import { useLoaderData } from "react-router";
-import { useEffect, useState } from 'react';
 
-import type { Exam } from "@/types/exam";
 import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
 import { ModifyExamForm } from "../forms/ModifyExamForm";
-import { getExam } from "@/api/apiCalls";
 import type { loadDataExam } from "@/api/loadData";
 
 export function ExamsTable() {
   const { university, course, exams } = useLoaderData<typeof loadDataExam>();
-  const [examsState, setExams] = useState<Exam[]>([]);
-
-  useEffect(() => {
-    setExams(exams!);
-  }, [exams]);
-
-  async function updateData(e?: Exam) {
-    const updatedExam: Exam = await getExam(university!.slug, course!.slug, e!.slug);
-    setExams(examsState.map((exam) => {
-      return (exam === e) ? updatedExam : exam;
-    }));
-  }
 
   return (
     <div>
@@ -47,14 +32,14 @@ export function ExamsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {examsState.map(exam => (
+            {exams.map(exam => (
               <TableRow>
                 <TableCell className="font-medium">{exam.name}</TableCell>
                 <TableCell>{exam.ects}</TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={e => e.stopPropagation()}>
-                      <EditingDialog data={exam} CustomForm={ModifyExamForm} updateFunct={updateData} />
+                      <EditingDialog formId="edit-exam" data={exam} CustomForm={ModifyExamForm} />
                     </span>
                     <span onClick={e => e.stopPropagation()}>
                       <DeleteDialog />

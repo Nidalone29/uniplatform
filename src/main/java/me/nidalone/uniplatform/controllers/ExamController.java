@@ -98,8 +98,8 @@ public class ExamController {
       @PathVariable String universitySlug,
       @PathVariable String courseSlug,
       @PathVariable String examSlug,
-      @RequestParam int ects) {
-    examService.updateExamECTS(universitySlug, courseSlug, examSlug, ects);
+      @ModelAttribute ExamDataDTO examDataDTO) {
+    examService.updateExamECTS(universitySlug, courseSlug, examSlug, examDataDTO.ects());
     return ResponseEntity.ok("Exam updated successfully!");
   }
 

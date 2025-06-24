@@ -5,6 +5,7 @@ import { ExamsTable } from "./components/tables/ExamsTable";
 import { MainPage } from "./pages/MainPage";
 import { TableDataSkeleton } from "./components/common/TableDataSkeleton";
 import { loadDataUni, loadDataCourse, loadDataExam } from "./api/loadData";
+import { manipulateCoursesDispatcher, manipulateExamsDispatcher, manipulateUniversitiesDispatcher } from "./api/actionDispatchers";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
             index: true,
             Component: UniversitiesTable,
             loader: loadDataUni,
+            action: manipulateUniversitiesDispatcher,
             HydrateFallback: TableDataSkeleton,
           },
           {
@@ -28,15 +30,16 @@ export const router = createBrowserRouter([
                 index: true,
                 Component: CoursesTable,
                 loader: ({ params }) => loadDataCourse(params.UniID!),
+                action: manipulateCoursesDispatcher,
                 HydrateFallback: TableDataSkeleton,
               },
               {
                 path: ":CourseID",
                 Component: ExamsTable,
                 handle: "Exam",
-                loader: ({ params }) => {
-                  return loadDataExam(params.UniID!, params.CourseID!)
-                },
+                loader: ({ params }) => loadDataExam(params.UniID!, params.CourseID!),
+                action: manipulateExamsDispatcher,
+                HydrateFallback: TableDataSkeleton,
               },
             ],
           },

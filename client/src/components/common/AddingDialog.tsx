@@ -10,32 +10,30 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-import { type Entities, type FormInDialogProps } from "@/types/formTypes";
+import { type DialogProps, type Entities } from "@/types/formTypes";
+import { Loader2Icon } from "lucide-react";
 
-interface EditingDialogProps<T extends Entities> {
-  data?: T, // just a passthrough,
-  updateFunct?: (updatedData?: T) => void; // just a passthrough,
-  CustomForm: React.ComponentType<FormInDialogProps<T>>;
-}
-
-export function AddingDialog<T extends Entities>({ CustomForm, updateFunct }: EditingDialogProps<T>) {
+export function AddingDialog<T extends Entities>({ formId, CustomForm }: DialogProps<T>) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [formState, setFormState] = useState<boolean>(false);
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <Button className="align-right">Add</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent showCloseButton={!formState}>
         <DialogHeader>
           <DialogTitle>Creating a new entity</DialogTitle>
         </DialogHeader>
-        <CustomForm closingFunct={setOpenDialog} reFetchUpdatedData={updateFunct} />
+        <CustomForm formId={formId} closingFunct={setOpenDialog} formStateFunct={setFormState} />
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" disabled={formState}>Cancel</Button>
           </DialogClose>
-          <Button type="submit" form="add-university-form">Submit</Button>
+          <Button type="submit" form={formId} disabled={formState}>
+            Submit {formState ? <Loader2Icon className="animate-spin" /> : <></>}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

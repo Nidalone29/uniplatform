@@ -1,66 +1,37 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
+import { useFormFetcher } from "@/hooks/useFormFetcher";
+import { useEffect } from "react";
 
-import type { Course } from "@/types/course";
+import { EditCourseFormSchema, type Course } from "@/types/course";
 import type { FormInDialogProps } from "@/types/formTypes";
 
-// TODO the schemas will all be eventually generated via https://github.com/orval-labs/orval
-const FormSchema = z.object({
-  name: z.string().min(2, {
-    message: "course name must be at least 2 characters.",
-  }),
-})
+export function ModifyCourseForm({ formId, formData, closingFunct, formStateFunct }: FormInDialogProps<Course>) {
+  const current_course: Course = formData!;
+  const { submissionState, submitFunction } = useFormFetcher(closingFunct);
 
-export function ModifyCourseForm({ closingFunct }: FormInDialogProps<Course>) {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  useEffect(() => {
+    formStateFunct!(submissionState)
+  }, [formStateFunct, submissionState]);
+
+  const form = useForm<z.infer<typeof EditCourseFormSchema>>({
+    resolver: zodResolver(EditCourseFormSchema),
     defaultValues: {
-      name: "",
+
     },
   })
 
-  // TODO finish form by making the HTTP request and adding toast.success() + close or toast.error() based 
-  // on the server response (such as a UniAlreadyExists?)
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    closingFunct(false);
-    console.log("form submitted!!!")
-    toast.success("You submitted the following values", {
-      description: (
-        <pre className="mt-2 w-full rounded-md p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      duration: 2000, // 2 seconds
-    })
+  function onSubmit(data: z.infer<typeof EditCourseFormSchema>) {
+    formStateFunct!(true); // just for making this feel more "snappy"
+    submitFunction({ intent: "edit", slug: current_course.slug, content: data }, { method: "POST", encType: "application/json" });
   }
 
   return (
     <Form {...form}>
-      <form id="uniform" onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Uni Name</FormLabel>
-              <FormControl>
-                <Input placeholder="University of caltanissetta" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+        <p>Unsupported operation</p>
       </form>
     </Form>
   );
