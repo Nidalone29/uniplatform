@@ -1,4 +1,4 @@
-import { addCourse, addUniversity } from "./apiCalls";
+import { addCourse, addExam, addUniversity } from "./apiCalls";
 
 export async function addDataUni(data: URLSearchParams) {
   return await addUniversity(data)
@@ -21,3 +21,15 @@ export async function addDataCourse(uni_slug: string, data: URLSearchParams) {
       return { ok: false };
     });
 }
+export async function addDataExam(university_slug: string, course_slug: string, searchParams: URLSearchParams,) {
+  return await addExam(university_slug, course_slug, searchParams)
+    .then(() => {
+      return { ok: true };
+    })
+    .catch(error => {
+      console.error("Failed to add exam:", error);
+      return { ok: false };
+    });
+}
+
+

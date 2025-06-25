@@ -13,6 +13,8 @@ import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
 import { ModifyExamForm } from "../forms/ModifyExamForm";
 import type { loadDataExam } from "@/api/loadData";
+import { AddingDialog } from "../common/AddingDialog";
+import { AddExamForm } from "../forms/AddExamForm";
 
 export function ExamsTable() {
   const { university, course, exams } = useLoaderData<typeof loadDataExam>();
@@ -21,6 +23,7 @@ export function ExamsTable() {
     <div>
       <div className="flex m-2 align-middle content-center justify-between">
         <div className="align-middle font-medium">{course!.name} course at {university!.name}</div>
+        <AddingDialog formId="add-exam" CustomForm={AddExamForm} />
       </div>
       <div className="flex m-2 align-middle content-center justify-center">
         <Table>
