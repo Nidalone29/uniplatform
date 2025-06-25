@@ -12,10 +12,11 @@ import { useLoaderData, useNavigate } from "react-router";
 import { EditingDialog } from "../common/EditingDialog";
 import { DeleteDialog } from "../common/DeleteDialog";
 import { ModifyCourseForm } from "../forms/ModifyCourseForm";
-import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import type { Course } from "@/types/course";
 import type { loadDataCourse } from "@/api/loadData";
+import { AddCourseForm } from "../forms/AddCourseForm";
+import { AddingDialog } from "../common/AddingDialog";
 
 export function CoursesTable() {
   const { university, courses } = useLoaderData<typeof loadDataCourse>();
@@ -31,7 +32,7 @@ export function CoursesTable() {
     <div>
       <div className="flex m-2 align-middle content-center justify-between">
         <div className="align-middle font-medium">{university!.name}</div>
-        <Button className="align-right">Add Course</Button>
+        <AddingDialog formId="add-course" CustomForm={AddCourseForm} />
       </div>
       <div className="flex m-2 align-middle content-center justify-center">
         <Table className="w-full table-fixed">

@@ -2,7 +2,7 @@ import { ContentToURLSearchParams } from "@/lib/utils";
 import type { ActionDispatcherRequest } from "@/types/ActionDispatcherRequest";
 import type { ActionFunctionArgs } from "react-router";
 import { editDataExam } from "./editData";
-import { addDataUni } from "./addData";
+import { addDataCourse, addDataUni } from "./addData";
 
 // basically the goal is to implement the action reducer pattern, by always submitting a post to the route and dealing with an intent/action field
 // https://sergiodxa.com/articles/multiple-forms-per-route-in-remix
@@ -38,8 +38,8 @@ export async function manipulateCoursesDispatcher({ request, params }: ActionFun
 
   switch (intent) {
     case "add": {
-      // unsupported for now
-      return;
+      const searchParams = ContentToURLSearchParams(content!);
+      return addDataCourse(university_slug, searchParams);
     }
     case "edit": {
       // unsupported for now

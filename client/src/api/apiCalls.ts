@@ -24,6 +24,10 @@ export async function getCourse(uni: string, course: string): Promise<Course> {
   return await ky.get("http://localhost:8080/api/universities/" + uni + "/courses/" + course).json<Course>();
 }
 
+export async function addCourse(uni: string, courseData: URLSearchParams) {
+  return await ky.post("http://localhost:8080/api/universities/" + uni + "/courses/", { body: courseData });
+}
+
 export async function getExams(uni: string, course: string): Promise<Exam[]> {
   return await ky.get("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/").json<Exam[]>();
 }
