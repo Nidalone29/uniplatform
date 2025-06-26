@@ -16,6 +16,10 @@ export async function addUniversity(uniData: URLSearchParams) {
   return await ky.post("http://localhost:8080/api/universities/", { body: uniData });
 }
 
+export async function deleteUniversity(uni: string) {
+  return await ky.delete("http://localhost:8080/api/universities/" + uni);
+}
+
 export async function getCourses(uni: string): Promise<Course[]> {
   return await ky.get("http://localhost:8080/api/universities/" + uni + "/courses/").json<Course[]>();
 }
@@ -26,6 +30,10 @@ export async function getCourse(uni: string, course: string): Promise<Course> {
 
 export async function addCourse(uni: string, courseData: URLSearchParams) {
   return await ky.post("http://localhost:8080/api/universities/" + uni + "/courses/", { body: courseData });
+}
+
+export async function deleteCourse(uni: string, course: string) {
+  return await ky.delete("http://localhost:8080/api/universities/" + uni + "/courses/" + course);
 }
 
 export async function getExams(uni: string, course: string): Promise<Exam[]> {
@@ -45,3 +53,8 @@ export async function updateExam(uni: string, course: string, exam: string, sear
     { body: search_params }
   );
 }
+
+export async function deleteExam(uni: string, course: string, exam: string) {
+  return await ky.delete("http://localhost:8080/api/universities/" + uni + "/courses/" + course + "/exams/" + exam);
+}
+

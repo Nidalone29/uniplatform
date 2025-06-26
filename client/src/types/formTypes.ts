@@ -18,3 +18,7 @@ export interface DialogProps<T extends Entities> {
   data?: T, // just a passthrough (defined for editing)
   CustomForm: React.ComponentType<FormInDialogProps<T>>;
 }
+
+export interface DeleteDialogProps<T extends Entities> {
+  data: T,
+}

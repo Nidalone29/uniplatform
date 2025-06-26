@@ -15,6 +15,7 @@ import { ModifyExamForm } from "../forms/ModifyExamForm";
 import type { loadDataExam } from "@/api/loadData";
 import { AddingDialog } from "../common/AddingDialog";
 import { AddExamForm } from "../forms/AddExamForm";
+import type { Exam } from "@/types/exam";
 
 export function ExamsTable() {
   const { university, course, exams } = useLoaderData<typeof loadDataExam>();
@@ -42,10 +43,10 @@ export function ExamsTable() {
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={e => e.stopPropagation()}>
-                      <EditingDialog formId="edit-exam" data={exam} CustomForm={ModifyExamForm} />
+                      <EditingDialog<Exam> formId="edit-exam" data={exam} CustomForm={ModifyExamForm} />
                     </span>
                     <span onClick={e => e.stopPropagation()}>
-                      <DeleteDialog />
+                      <DeleteDialog data={exam} />
                     </span>
                   </div>
                 </TableCell>

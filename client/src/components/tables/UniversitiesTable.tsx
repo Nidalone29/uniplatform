@@ -47,7 +47,7 @@ export function UniversitiesTable() {
                       <EditingDialog formId="edit-university" data={uni} CustomForm={ModifyUniversityForm} />
                     </span>
                     <span onClick={e => e.stopPropagation()}>
-                      <DeleteDialog />
+                      <DeleteDialog data={uni} />
                     </span>
                   </div>
                 </TableCell>

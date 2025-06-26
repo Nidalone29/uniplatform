@@ -56,7 +56,7 @@ export function CoursesTable() {
                       <EditingDialog formId="edit-course" data={course} CustomForm={ModifyCourseForm} />
                     </span>
                     <span onClick={e => e.stopPropagation()}>
-                      <DeleteDialog />
+                      <DeleteDialog data={course} />
                     </span>
                   </div>
                 </TableCell>

@@ -1,7 +1,7 @@
-import { addCourse, addExam, addUniversity } from "./apiCalls";
+import { deleteCourse, deleteExam, deleteUniversity } from "./apiCalls";
 
-export async function addDataUni(data: URLSearchParams) {
-  return await addUniversity(data)
+export async function deleteDataUni(university_slug: string) {
+  return await deleteUniversity(university_slug)
     .then(() => {
       return { ok: true };
     })
@@ -11,8 +11,8 @@ export async function addDataUni(data: URLSearchParams) {
     });
 }
 
-export async function addDataCourse(uni_slug: string, data: URLSearchParams) {
-  return await addCourse(uni_slug, data)
+export async function deleteDataCourse(university_slug: string, course_slug: string,) {
+  return await deleteCourse(university_slug, course_slug)
     .then(() => {
       return { ok: true };
     })
@@ -22,8 +22,8 @@ export async function addDataCourse(uni_slug: string, data: URLSearchParams) {
     });
 }
 
-export async function addDataExam(university_slug: string, course_slug: string, searchParams: URLSearchParams) {
-  return await addExam(university_slug, course_slug, searchParams)
+export async function deleteDataExam(university_slug: string, course_slug: string, exam_slug: string) {
+  return await deleteExam(university_slug, course_slug, exam_slug)
     .then(() => {
       return { ok: true };
     })

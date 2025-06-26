@@ -3,6 +3,7 @@ import type { ActionDispatcherRequest } from "@/types/ActionDispatcherRequest";
 import type { ActionFunctionArgs } from "react-router";
 import { editDataExam } from "./editData";
 import { addDataCourse, addDataExam, addDataUni } from "./addData";
+import { deleteDataCourse, deleteDataExam, deleteDataUni } from "./deleteData";
 
 // basically the goal is to implement the action reducer pattern, by always submitting a post to the route and dealing with an intent/action field
 // https://sergiodxa.com/articles/multiple-forms-per-route-in-remix
@@ -21,8 +22,7 @@ export async function manipulateUniversitiesDispatcher({ request }: ActionFuncti
       return;
     }
     case "delete": {
-      // unsupported for now
-      return;
+      return deleteDataUni(university_slug!);
     }
     default: {
       throw new Error("Unknown action");
@@ -46,8 +46,7 @@ export async function manipulateCoursesDispatcher({ request, params }: ActionFun
       return;
     }
     case "delete": {
-      // unsupported for now
-      return;
+      return deleteDataCourse(university_slug, course_slug!);
     }
     default: {
       throw new Error("Unknown action");
@@ -72,8 +71,7 @@ export async function manipulateExamsDispatcher({ request, params }: ActionFunct
       return editDataExam(searchParams, university_slug, course_slug, exam_slug!);
     }
     case "delete": {
-      // unsupported for now
-      return;
+      return deleteDataExam(university_slug, course_slug, exam_slug!);
     }
     default: {
       throw new Error("Unknown action");
