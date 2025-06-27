@@ -6,7 +6,7 @@ export async function deleteDataUni(university_slug: string) {
       return { ok: true };
     })
     .catch(error => {
-      console.error("Failed to add university:", error);
+      console.error("Failed to delete university:", error);
       return { ok: false };
     });
 }
@@ -17,7 +17,7 @@ export async function deleteDataCourse(university_slug: string, course_slug: str
       return { ok: true };
     })
     .catch(error => {
-      console.error("Failed to add course:", error);
+      console.error("Failed to delete course:", error);
       return { ok: false };
     });
 }
@@ -28,7 +28,7 @@ export async function deleteDataExam(university_slug: string, course_slug: strin
       return { ok: true };
     })
     .catch(error => {
-      console.error("Failed to add exam:", error);
+      console.error("Failed to delete exam:", error);
       return { ok: false };
     });
 }
