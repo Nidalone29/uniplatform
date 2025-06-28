@@ -1,36 +1,41 @@
-import { deleteCourse, deleteExam, deleteUniversity } from "./apiCalls";
+import { deleteCourse, deleteExam, deleteUniversity } from "@/api/apiCalls";
 
 export async function deleteDataUni(university_slug: string) {
   return await deleteUniversity(university_slug)
     .then(() => {
       return { ok: true };
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Failed to delete university:", error);
       return { ok: false };
     });
 }
 
-export async function deleteDataCourse(university_slug: string, course_slug: string,) {
+export async function deleteDataCourse(
+  university_slug: string,
+  course_slug: string,
+) {
   return await deleteCourse(university_slug, course_slug)
     .then(() => {
       return { ok: true };
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Failed to delete course:", error);
       return { ok: false };
     });
 }
 
-export async function deleteDataExam(university_slug: string, course_slug: string, exam_slug: string) {
+export async function deleteDataExam(
+  university_slug: string,
+  course_slug: string,
+  exam_slug: string,
+) {
   return await deleteExam(university_slug, course_slug, exam_slug)
     .then(() => {
       return { ok: true };
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Failed to delete exam:", error);
       return { ok: false };
     });
 }
-
-

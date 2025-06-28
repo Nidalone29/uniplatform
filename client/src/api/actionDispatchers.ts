@@ -1,16 +1,27 @@
+import type { ActionFunctionArgs } from "react-router";
+
+import { addDataCourse, addDataExam, addDataUni } from "@/api/addData";
+import {
+  deleteDataCourse,
+  deleteDataExam,
+  deleteDataUni,
+} from "@/api/deleteData";
+import { editDataExam } from "@/api/editData";
 import { ContentToURLSearchParams } from "@/lib/utils";
 import type { ActionDispatcherRequest } from "@/types/ActionDispatcherRequest";
-import type { ActionFunctionArgs } from "react-router";
-import { editDataExam } from "./editData";
-import { addDataCourse, addDataExam, addDataUni } from "./addData";
-import { deleteDataCourse, deleteDataExam, deleteDataUni } from "./deleteData";
 
 // basically the goal is to implement the action reducer pattern, by always submitting a post to the route and dealing with an intent/action field
 // https://sergiodxa.com/articles/multiple-forms-per-route-in-remix
 // similar to https://react.dev/learn/extracting-state-logic-into-a-reducer
 
-export async function manipulateUniversitiesDispatcher({ request }: ActionFunctionArgs) {
-  const { intent, slug: university_slug, content }: ActionDispatcherRequest = await request.json();
+export async function manipulateUniversitiesDispatcher({
+  request,
+}: ActionFunctionArgs) {
+  const {
+    intent,
+    slug: university_slug,
+    content,
+  }: ActionDispatcherRequest = await request.json();
 
   switch (intent) {
     case "add": {
@@ -30,11 +41,18 @@ export async function manipulateUniversitiesDispatcher({ request }: ActionFuncti
   }
 }
 
-export async function manipulateCoursesDispatcher({ request, params }: ActionFunctionArgs) {
+export async function manipulateCoursesDispatcher({
+  request,
+  params,
+}: ActionFunctionArgs) {
   // these are "guaranteed" by react-router
   const university_slug: string = params.UniID!;
 
-  const { intent, slug: course_slug, content }: ActionDispatcherRequest = await request.json();
+  const {
+    intent,
+    slug: course_slug,
+    content,
+  }: ActionDispatcherRequest = await request.json();
 
   switch (intent) {
     case "add": {
@@ -54,12 +72,19 @@ export async function manipulateCoursesDispatcher({ request, params }: ActionFun
   }
 }
 
-export async function manipulateExamsDispatcher({ request, params }: ActionFunctionArgs) {
+export async function manipulateExamsDispatcher({
+  request,
+  params,
+}: ActionFunctionArgs) {
   // these are "guaranteed" by react-router
   const university_slug: string = params.UniID!;
   const course_slug: string = params.CourseID!;
 
-  const { intent, slug: exam_slug, content }: ActionDispatcherRequest = await request.json();
+  const {
+    intent,
+    slug: exam_slug,
+    content,
+  }: ActionDispatcherRequest = await request.json();
 
   switch (intent) {
     case "add": {
@@ -68,7 +93,12 @@ export async function manipulateExamsDispatcher({ request, params }: ActionFunct
     }
     case "edit": {
       const searchParams = ContentToURLSearchParams(content!);
-      return editDataExam(searchParams, university_slug, course_slug, exam_slug!);
+      return editDataExam(
+        searchParams,
+        university_slug,
+        course_slug,
+        exam_slug!,
+      );
     }
     case "delete": {
       return deleteDataExam(university_slug, course_slug, exam_slug!);

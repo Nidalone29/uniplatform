@@ -1,3 +1,5 @@
+import { Link, useMatches } from "react-router";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -5,8 +7,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Link, useMatches } from "react-router";
+} from "@/components/ui/breadcrumb";
 
 export function TableBreadcrumb() {
   const matches = useMatches();
@@ -14,13 +15,16 @@ export function TableBreadcrumb() {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {
-          matches.filter((match) => match.handle).map((match, i, arr) => (
-            (i != arr.length - 1) ? (
+        {matches
+          .filter((match) => match.handle)
+          .map((match, i, arr) =>
+            i != arr.length - 1 ? (
               <>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link to={match.pathname} viewTransition>{"" + match.handle}</Link>
+                    <Link to={match.pathname} viewTransition>
+                      {"" + match.handle}
+                    </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
@@ -29,9 +33,8 @@ export function TableBreadcrumb() {
               <BreadcrumbItem>
                 <BreadcrumbPage>{"" + match.handle}</BreadcrumbPage>
               </BreadcrumbItem>
-            )
-          ))
-        }
+            ),
+          )}
       </BreadcrumbList>
     </Breadcrumb>
   );

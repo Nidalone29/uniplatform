@@ -1,6 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+
 import {
   Form,
   FormControl,
@@ -10,18 +12,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useEffect } from "react";
 
-import type { FormInDialogProps } from "@/types/formTypes";
 import { useFormFetcher } from "@/hooks/useFormFetcher";
 import { AddExamFormSchema, type Exam } from "@/types/exam";
+import type { FormInDialogProps } from "@/types/formTypes";
 
-export function AddExamForm({ formId, closingFunct, formStateFunct }: FormInDialogProps<Exam>) {
-
+export function AddExamForm({
+  formId,
+  closingFunct,
+  formStateFunct,
+}: FormInDialogProps<Exam>) {
   const { submissionState, submitFunction } = useFormFetcher(closingFunct);
 
   useEffect(() => {
-    formStateFunct!(submissionState)
+    formStateFunct!(submissionState);
   }, [formStateFunct, submissionState]);
 
   const form = useForm<z.infer<typeof AddExamFormSchema>>({
@@ -30,16 +34,23 @@ export function AddExamForm({ formId, closingFunct, formStateFunct }: FormInDial
       name: "",
       ects: 8,
     },
-  })
+  });
 
   function onSubmit(data: z.infer<typeof AddExamFormSchema>) {
     formStateFunct!(true); // just for making this feel more "snappy"
-    submitFunction({ intent: "add", content: data }, { method: "POST", encType: "application/json" });
+    submitFunction(
+      { intent: "add", content: data },
+      { method: "POST", encType: "application/json" },
+    );
   }
 
   return (
     <Form {...form}>
-      <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form
+        id={formId}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-2/3 space-y-6"
+      >
         <FormField
           control={form.control}
           name="name"

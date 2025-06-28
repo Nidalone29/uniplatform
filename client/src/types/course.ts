@@ -1,10 +1,11 @@
 import { z } from "zod";
-import type { Exam } from "./exam";
+
+import type { Exam } from "@/types/exam";
 
 interface Course {
-  name: string,
-  slug: string,
-  exams: Exam[]
+  name: string;
+  slug: string;
+  exams: Exam[];
 }
 
 const AddCourseFormSchema = z.object({
@@ -13,7 +14,6 @@ const AddCourseFormSchema = z.object({
   }),
 });
 
-const EditCourseFormSchema = z.object({
-});
+const EditCourseFormSchema = z.object({});
 
-export { type Course, AddCourseFormSchema, EditCourseFormSchema };
+export { AddCourseFormSchema, type Course, EditCourseFormSchema };

@@ -1,6 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+
 import {
   Form,
   FormControl,
@@ -11,17 +13,21 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { type Exam, EditExamFormSchema } from "@/types/exam";
-import type { FormInDialogProps } from "@/types/formTypes";
 import { useFormFetcher } from "@/hooks/useFormFetcher";
-import { useEffect } from "react";
+import { EditExamFormSchema, type Exam } from "@/types/exam";
+import type { FormInDialogProps } from "@/types/formTypes";
 
-export function ModifyExamForm({ formData, formId, closingFunct, formStateFunct }: FormInDialogProps<Exam>) {
+export function ModifyExamForm({
+  formData,
+  formId,
+  closingFunct,
+  formStateFunct,
+}: FormInDialogProps<Exam>) {
   const current_exam: Exam = formData!;
   const { submissionState, submitFunction } = useFormFetcher(closingFunct);
 
   useEffect(() => {
-    formStateFunct!(submissionState)
+    formStateFunct!(submissionState);
   }, [formStateFunct, submissionState]);
 
   const form = useForm<z.infer<typeof EditExamFormSchema>>({
@@ -29,16 +35,23 @@ export function ModifyExamForm({ formData, formId, closingFunct, formStateFunct 
     defaultValues: {
       ects: current_exam.ects,
     },
-  })
+  });
 
   function onSubmit(data: z.infer<typeof EditExamFormSchema>) {
     formStateFunct!(true); // just for making this feel more "snappy"
-    submitFunction({ intent: "edit", slug: current_exam.slug, content: data }, { method: "POST", encType: "application/json" });
+    submitFunction(
+      { intent: "edit", slug: current_exam.slug, content: data },
+      { method: "POST", encType: "application/json" },
+    );
   }
 
   return (
     <Form {...form}>
-      <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form
+        id={formId}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-2/3 space-y-6"
+      >
         <FormField
           control={form.control}
           name="ects"

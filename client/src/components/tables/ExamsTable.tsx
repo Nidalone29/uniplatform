@@ -1,3 +1,5 @@
+import { useLoaderData } from "react-router";
+
 import {
   Table,
   TableBody,
@@ -7,14 +9,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { useLoaderData } from "react-router";
-
-import { EditingDialog } from "../common/EditingDialog";
-import { DeleteDialog } from "../common/DeleteDialog";
-import { ModifyExamForm } from "../forms/ModifyExamForm";
 import type { loadDataExam } from "@/api/loadData";
-import { AddingDialog } from "../common/AddingDialog";
-import { AddExamForm } from "../forms/AddExamForm";
+import { AddingDialog } from "@/components/common/AddingDialog";
+import { DeleteDialog } from "@/components/common/DeleteDialog";
+import { EditingDialog } from "@/components/common/EditingDialog";
+import { AddExamForm } from "@/components/forms/AddExamForm";
+import { ModifyExamForm } from "@/components/forms/ModifyExamForm";
 import type { Exam } from "@/types/exam";
 
 export function ExamsTable() {
@@ -23,7 +23,9 @@ export function ExamsTable() {
   return (
     <div>
       <div className="flex m-2 align-middle content-center justify-between">
-        <div className="align-middle font-medium">{course!.name} course at {university!.name}</div>
+        <div className="align-middle font-medium">
+          {course!.name} course at {university!.name}
+        </div>
         <AddingDialog formId="add-exam" CustomForm={AddExamForm} />
       </div>
       <div className="flex m-2 align-middle content-center justify-center">
@@ -36,16 +38,20 @@ export function ExamsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {exams.map(exam => (
+            {exams.map((exam) => (
               <TableRow>
                 <TableCell className="font-medium">{exam.name}</TableCell>
                 <TableCell>{exam.ects}</TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">
-                    <span onClick={e => e.stopPropagation()}>
-                      <EditingDialog<Exam> formId="edit-exam" data={exam} CustomForm={ModifyExamForm} />
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <EditingDialog<Exam>
+                        formId="edit-exam"
+                        data={exam}
+                        CustomForm={ModifyExamForm}
+                      />
                     </span>
-                    <span onClick={e => e.stopPropagation()}>
+                    <span onClick={(e) => e.stopPropagation()}>
                       <DeleteDialog data={exam} />
                     </span>
                   </div>

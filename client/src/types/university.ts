@@ -1,10 +1,11 @@
 import { z } from "zod";
-import type { Course } from "./course";
+
+import type { Course } from "@/types/course";
 
 interface University {
-  name: string,
-  slug: string,
-  courses: Course[]
+  name: string;
+  slug: string;
+  courses: Course[];
 }
 
 // TODO the schemas will all be eventually generated via https://github.com/orval-labs/orval
@@ -15,8 +16,6 @@ const AddUniversityFormSchema = z.object({
 });
 
 // for now empty
-const EditUniversityFormSchema = z.object({
-});
+const EditUniversityFormSchema = z.object({});
 
-export { type University, AddUniversityFormSchema, EditUniversityFormSchema };
-
+export { AddUniversityFormSchema, EditUniversityFormSchema, type University };

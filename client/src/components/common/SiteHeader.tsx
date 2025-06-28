@@ -1,5 +1,5 @@
-import { ModeToggle } from "./ModeToggle";
-import { TableBreadcrumb } from "./TableBreadcrumb";
+import { ModeToggle } from "@/components/common/ModeToggle";
+import { TableBreadcrumb } from "@/components/common/TableBreadcrumb";
 
 export function SiteHeader() {
   return (

@@ -1,6 +1,7 @@
-import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
+
 import { SiteHeader } from "@/components/common/SiteHeader";
+import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { TableLayout } from "@/layouts/TableLayout";
 
 export function MainPage() {

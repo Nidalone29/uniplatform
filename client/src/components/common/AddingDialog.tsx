@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -7,13 +11,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 import { type DialogProps, type Entities } from "@/types/formTypes";
-import { Loader2Icon } from "lucide-react";
 
-export function AddingDialog<T extends Entities>({ formId, CustomForm }: DialogProps<T>) {
+export function AddingDialog<T extends Entities>({
+  formId,
+  CustomForm,
+}: DialogProps<T>) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [formState, setFormState] = useState<boolean>(false);
 
@@ -26,13 +30,20 @@ export function AddingDialog<T extends Entities>({ formId, CustomForm }: DialogP
         <DialogHeader>
           <DialogTitle>Creating a new entity</DialogTitle>
         </DialogHeader>
-        <CustomForm formId={formId} closingFunct={setOpenDialog} formStateFunct={setFormState} />
+        <CustomForm
+          formId={formId}
+          closingFunct={setOpenDialog}
+          formStateFunct={setFormState}
+        />
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline" disabled={formState}>Cancel</Button>
+            <Button variant="outline" disabled={formState}>
+              Cancel
+            </Button>
           </DialogClose>
           <Button type="submit" form={formId} disabled={formState}>
-            Submit {formState ? <Loader2Icon className="animate-spin" /> : <></>}
+            Submit{" "}
+            {formState ? <Loader2Icon className="animate-spin" /> : <></>}
           </Button>
         </DialogFooter>
       </DialogContent>

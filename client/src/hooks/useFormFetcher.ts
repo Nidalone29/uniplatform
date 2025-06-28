@@ -17,8 +17,10 @@ export function useFormFetcher(closingFunct: (open: boolean) => void) {
         return () => {
           closingFunct(false);
           toast.dismiss();
-          toast.success("Operation completed successfully!", { duration: 2000 });
-        }
+          toast.success("Operation completed successfully!", {
+            duration: 2000,
+          });
+        };
       } else {
         // here the loader is still called, so there is a possible optimization if we use something like shouldRevalidate
         // https://remix.run/docs/en/main/route/should-revalidate
@@ -27,7 +29,6 @@ export function useFormFetcher(closingFunct: (open: boolean) => void) {
         toast.error("Error", { duration: 2000 });
       }
     }
-
   }, [fetcher, fetcher.state, fetcher.data, closingFunct]);
 
   return { submissionState, submitFunction: fetcher.submit };

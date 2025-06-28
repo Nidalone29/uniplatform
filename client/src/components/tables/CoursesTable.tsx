@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useLoaderData, useNavigate } from "react-router";
+
 import {
   Table,
   TableBody,
@@ -7,16 +10,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { useLoaderData, useNavigate } from "react-router";
-
-import { EditingDialog } from "../common/EditingDialog";
-import { DeleteDialog } from "../common/DeleteDialog";
-import { ModifyCourseForm } from "../forms/ModifyCourseForm";
-import { useEffect, useState } from "react";
-import type { Course } from "@/types/course";
 import type { loadDataCourse } from "@/api/loadData";
-import { AddCourseForm } from "../forms/AddCourseForm";
-import { AddingDialog } from "../common/AddingDialog";
+import { AddingDialog } from "@/components/common/AddingDialog";
+import { DeleteDialog } from "@/components/common/DeleteDialog";
+import { EditingDialog } from "@/components/common/EditingDialog";
+import { AddCourseForm } from "@/components/forms/AddCourseForm";
+import { ModifyCourseForm } from "@/components/forms/ModifyCourseForm";
+import type { Course } from "@/types/course";
 
 export function CoursesTable() {
   const { university, courses } = useLoaderData<typeof loadDataCourse>();
@@ -44,18 +44,24 @@ export function CoursesTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {coursesState.map(course => (
-              <TableRow onClick={() => {
-                navigate(`${course.slug}`, { viewTransition: true });
-              }}>
+            {coursesState.map((course) => (
+              <TableRow
+                onClick={() => {
+                  navigate(`${course.slug}`, { viewTransition: true });
+                }}
+              >
                 <TableCell className="font-medium">{course.name}</TableCell>
                 <TableCell></TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">
-                    <span onClick={e => e.stopPropagation()}>
-                      <EditingDialog formId="edit-course" data={course} CustomForm={ModifyCourseForm} />
+                    <span onClick={(e) => e.stopPropagation()}>
+                      <EditingDialog
+                        formId="edit-course"
+                        data={course}
+                        CustomForm={ModifyCourseForm}
+                      />
                     </span>
-                    <span onClick={e => e.stopPropagation()}>
+                    <span onClick={(e) => e.stopPropagation()}>
                       <DeleteDialog data={course} />
                     </span>
                   </div>
