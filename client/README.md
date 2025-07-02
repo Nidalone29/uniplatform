@@ -1,54 +1,42 @@
-# React + TypeScript + Vite
+# Frontend client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Run Locally
 
-Currently, two official plugins are available:
+It is obviously advised to run the [backend server first](../server/README.md#run-locally), or just run everything with docker compose.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Native Dev
 
-## Expanding the ESLint configuration
+If you are developing you can simply install the dependencies
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```sh
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+and run vite with
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```sh
+npm run dev
 ```
+
+### Docker container Dev
+
+The client will be available at `localhost:<VITE_CLIENT_PORT_DEV>`
+
+```sh
+docker build -t client .
+```
+
+```sh
+docker run client
+```
+
+### Docker compose
+
+You can build and run the container with docker compose.
+From the root directory of the repository run:
+
+```sh
+docker compose -f "compose.yaml" up -d --build "client"
+```
+
+The client will be available at `localhost:8081`

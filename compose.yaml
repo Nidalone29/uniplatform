@@ -1,0 +1,25 @@
+# mostly based on https://github.com/docker/awesome-compose/blob/master/react-java-mysql/compose.yaml
+include:
+  - db.compose.yaml
+services:
+  client:
+    build: ./client
+    env_file:
+      - .env
+    ports:
+      - '8081:80'
+    networks:
+      - react-spring
+  server:
+    build: ./server
+    env_file:
+      - .env
+    ports:
+      - '8080:8080'
+    depends_on: 
+      - mysql
+    environment:
+      DB_URL: mysql
+    networks:
+      - react-spring
+      - spring-mysql
