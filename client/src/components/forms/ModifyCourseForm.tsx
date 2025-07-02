@@ -3,15 +3,23 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 import { useFormFetcher } from "@/hooks/useFormFetcher";
 import { type Course, EditCourseFormSchema } from "@/types/course";
 import type { FormInDialogProps } from "@/types/formTypes";
 
 export function ModifyCourseForm({
-  formId,
   formData,
+  formId,
   closingFunct,
   formStateFunct,
 }: FormInDialogProps<Course>) {
@@ -24,7 +32,9 @@ export function ModifyCourseForm({
 
   const form = useForm<z.infer<typeof EditCourseFormSchema>>({
     resolver: zodResolver(EditCourseFormSchema),
-    defaultValues: {},
+    defaultValues: {
+      ects: current_course.ects,
+    },
   });
 
   function onSubmit(data: z.infer<typeof EditCourseFormSchema>) {
@@ -42,7 +52,19 @@ export function ModifyCourseForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-2/3 space-y-6"
       >
-        <p>Unsupported operation</p>
+        <FormField
+          control={form.control}
+          name="ects"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>ECTS</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="new ects" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </form>
     </Form>
   );

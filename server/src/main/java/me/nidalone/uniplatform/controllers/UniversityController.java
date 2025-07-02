@@ -53,7 +53,7 @@ public class UniversityController {
    * Add a new university to the database
    *
    * @param universityCreationDTO to add
-   * @return Success message or throw UniAlreadyExistsException
+   * @return Success message or throw UniversityAlreadyExistsException
    */
   @PostMapping(path = "/")
   public ResponseEntity<String> addNewUniversity(

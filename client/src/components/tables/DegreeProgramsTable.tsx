@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router";
 
 import {
@@ -9,52 +10,67 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import type { loadDataUniversity } from "@/api/loadData";
+import type { loadDataDegreeProgram } from "@/api/loadData";
 import { AddingDialog } from "@/components/common/AddingDialog";
 import { DeleteDialog } from "@/components/common/DeleteDialog";
 import { EditingDialog } from "@/components/common/EditingDialog";
-import { AddUniversityForm } from "@/components/forms/AddUniversityForm";
-import { ModifyUniversityForm } from "@/components/forms/ModifyUniversityForm";
+import { AddDegreeProgramForm } from "@/components/forms/AddDegreeProgramForm";
+import { ModifyDegreeProgramForm } from "@/components/forms/ModifyDegreeProgramForm";
+import type { DegreeProgram } from "@/types/degreeProgram";
 
-export function UniversitiesTable() {
-  const { universities } = useLoaderData<typeof loadDataUniversity>();
+export function DegreeProgramsTable() {
+  const { university, degreePrograms } =
+    useLoaderData<typeof loadDataDegreeProgram>();
+  const [degreeProgramsState, setDegreePrograms] = useState<DegreeProgram[]>(
+    [],
+  );
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setDegreePrograms(degreePrograms!);
+  }, [degreePrograms]);
 
   return (
     <div>
       <div className="flex m-2 align-middle content-center justify-between">
-        <div className="align-middle font-medium"></div>
-        <AddingDialog formId="add-university" CustomForm={AddUniversityForm} />
+        <div className="align-middle font-medium">{university!.name}</div>
+        <AddingDialog
+          formId="add-degree-program"
+          CustomForm={AddDegreeProgramForm}
+        />
       </div>
       <div className="flex m-2 align-middle content-center justify-center">
-        <Table>
+        <Table className="w-full table-fixed">
           <TableHeader className="bg-card">
             <TableRow>
-              <TableHead className="w-[100px]">University name</TableHead>
+              <TableHead className="w-[100px]">Degree Program name</TableHead>
               <TableHead></TableHead>
               <TableHead className="w-[104px] text-center">Edit</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {universities.map((university) => (
+            {degreeProgramsState.map((degreeProgram) => (
               <TableRow
                 onClick={() => {
-                  navigate(`/${university.slug}`, { viewTransition: true });
+                  navigate(`${degreeProgram.slug}`, { viewTransition: true });
                 }}
               >
-                <TableCell className="font-medium">{university.name}</TableCell>
+                <TableCell className="font-medium">
+                  {degreeProgram.name}
+                </TableCell>
                 <TableCell></TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={(e) => e.stopPropagation()}>
                       <EditingDialog
-                        formId="edit-university"
-                        data={university}
-                        CustomForm={ModifyUniversityForm}
+                        formId="edit-course"
+                        data={degreeProgram}
+                        CustomForm={ModifyDegreeProgramForm}
                       />
                     </span>
                     <span onClick={(e) => e.stopPropagation()}>
-                      <DeleteDialog data={university} />
+                      <DeleteDialog data={degreeProgram} />
                     </span>
                   </div>
                 </TableCell>

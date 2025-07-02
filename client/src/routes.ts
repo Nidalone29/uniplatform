@@ -2,13 +2,17 @@ import { createBrowserRouter } from "react-router";
 
 import {
   manipulateCoursesDispatcher,
-  manipulateExamsDispatcher,
+  manipulateDegreeProgramDispatcher,
   manipulateUniversitiesDispatcher,
 } from "@/api/actionDispatchers";
-import { loadDataCourse, loadDataExam, loadDataUni } from "@/api/loadData";
+import {
+  loadDataCourse,
+  loadDataDegreeProgram,
+  loadDataUniversity,
+} from "@/api/loadData";
 import { TableDataSkeleton } from "@/components/common/TableDataSkeleton";
 import { CoursesTable } from "@/components/tables/CoursesTable";
-import { ExamsTable } from "@/components/tables/ExamsTable";
+import { DegreeProgramsTable } from "@/components/tables/DegreeProgramsTable";
 import { UniversitiesTable } from "@/components/tables/UniversitiesTable";
 import { MainPage } from "@/pages/MainPage";
 
@@ -23,28 +27,28 @@ export const router = createBrowserRouter([
           {
             index: true,
             Component: UniversitiesTable,
-            loader: loadDataUni,
+            loader: loadDataUniversity,
             action: manipulateUniversitiesDispatcher,
             HydrateFallback: TableDataSkeleton,
           },
           {
             path: ":UniID",
-            handle: "Course",
+            handle: "Degree Program",
             children: [
               {
                 index: true,
-                Component: CoursesTable,
-                loader: ({ params }) => loadDataCourse(params.UniID!),
-                action: manipulateCoursesDispatcher,
+                Component: DegreeProgramsTable,
+                loader: ({ params }) => loadDataDegreeProgram(params.UniID!),
+                action: manipulateDegreeProgramDispatcher,
                 HydrateFallback: TableDataSkeleton,
               },
               {
-                path: ":CourseID",
-                Component: ExamsTable,
-                handle: "Exam",
+                path: ":DegreeProgramID",
+                Component: CoursesTable,
+                handle: "Course",
                 loader: ({ params }) =>
-                  loadDataExam(params.UniID!, params.CourseID!),
-                action: manipulateExamsDispatcher,
+                  loadDataCourse(params.UniID!, params.DegreeProgramID!),
+                action: manipulateCoursesDispatcher,
                 HydrateFallback: TableDataSkeleton,
               },
             ],

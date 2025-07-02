@@ -1,7 +1,14 @@
 package me.nidalone.uniplatform.exceptions;
 
 public class CourseAlreadyExistsException extends RuntimeException {
-  public CourseAlreadyExistsException(String uni, String course) {
-    super("University \"" + uni + "\" already has \"" + course);
+  public CourseAlreadyExistsException(String university, String degreeProgram, String exam) {
+    super(
+        "University \""
+            + university
+            + "\" already has the course \""
+            + exam
+            + "\" in the degree program \""
+            + degreeProgram
+            + "!");
   }
 }

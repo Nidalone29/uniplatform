@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData } from "react-router";
 
 import {
   Table,
@@ -16,42 +15,33 @@ import { DeleteDialog } from "@/components/common/DeleteDialog";
 import { EditingDialog } from "@/components/common/EditingDialog";
 import { AddCourseForm } from "@/components/forms/AddCourseForm";
 import { ModifyCourseForm } from "@/components/forms/ModifyCourseForm";
-import type { Course } from "@/types/course";
 
 export function CoursesTable() {
-  const { university, courses } = useLoaderData<typeof loadDataCourse>();
-  const [coursesState, setCourses] = useState<Course[]>([]);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setCourses(courses!);
-  }, [courses]);
+  const { university, degreeProgram, courses } =
+    useLoaderData<typeof loadDataCourse>();
 
   return (
     <div>
       <div className="flex m-2 align-middle content-center justify-between">
-        <div className="align-middle font-medium">{university!.name}</div>
+        <div className="align-middle font-medium">
+          {degreeProgram!.name} degree program at {university!.name}
+        </div>
         <AddingDialog formId="add-course" CustomForm={AddCourseForm} />
       </div>
       <div className="flex m-2 align-middle content-center justify-center">
-        <Table className="w-full table-fixed">
+        <Table>
           <TableHeader className="bg-card">
             <TableRow>
               <TableHead className="w-[100px]">Course name</TableHead>
-              <TableHead></TableHead>
+              <TableHead>ETCS</TableHead>
               <TableHead className="w-[104px] text-center">Edit</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {coursesState.map((course) => (
-              <TableRow
-                onClick={() => {
-                  navigate(`${course.slug}`, { viewTransition: true });
-                }}
-              >
+            {courses.map((course) => (
+              <TableRow>
                 <TableCell className="font-medium">{course.name}</TableCell>
-                <TableCell></TableCell>
+                <TableCell>{course.ects}</TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={(e) => e.stopPropagation()}>

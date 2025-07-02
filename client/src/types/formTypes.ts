@@ -1,11 +1,11 @@
 import type { Course } from "@/types/course";
-import type { Exam } from "@/types/exam";
+import type { DegreeProgram } from "@/types/degreeProgram";
 import type { University } from "@/types/university";
 
-export type Entities = University | Course | Exam;
+export type Entities = University | DegreeProgram | Course;
 
 // This is a prop for the forms inside the dialog window when you want to edit a
-// Uni/Course/Exam...
+// University/DegreeProgram/Course...
 export interface FormInDialogProps<T extends Entities> {
   formId: string;
   formData?: T;

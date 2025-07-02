@@ -1,74 +1,85 @@
 package me.nidalone.uniplatform.controllers;
 
-import java.util.List;
-
 import me.nidalone.uniplatform.domain.dto.CourseCreationDTO;
 import me.nidalone.uniplatform.domain.dto.CourseDataDTO;
 import me.nidalone.uniplatform.domain.entities.Course;
-import me.nidalone.uniplatform.domain.entities.University;
+import me.nidalone.uniplatform.domain.entities.DegreeProgram;
 import me.nidalone.uniplatform.mappers.CourseMapper;
+import me.nidalone.uniplatform.services.DegreeProgramService;
 import me.nidalone.uniplatform.services.CourseService;
-import me.nidalone.uniplatform.services.UniversityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
-@RequestMapping(path = "/api/universities/{universitySlug}/courses")
+@RequestMapping(
+    path = "/api/universities/{universitySlug}/degree-programs/{degreeProgramSlug}/courses")
 public class CourseController {
   private final CourseService courseService;
-  private final UniversityService universityService;
+  private final DegreeProgramService degreeProgramService;
 
   private final CourseMapper courseMapper;
 
   public CourseController(
-      CourseService courseService, UniversityService universityService, CourseMapper courseMapper) {
+      CourseService courseService,
+      DegreeProgramService degreeProgramService,
+      CourseMapper courseMapper) {
     this.courseService = courseService;
-    this.universityService = universityService;
+    this.degreeProgramService = degreeProgramService;
     this.courseMapper = courseMapper;
   }
 
   /**
-   * Get all courses of a university
+   * Get all courses of a degree program
    *
    * @param universitySlug
+   * @param degreeProgramSlug
    * @return
    */
   @GetMapping(path = "/")
-  public ResponseEntity<List<CourseDataDTO>> getAllCourses(@PathVariable String universitySlug) {
+  public ResponseEntity<List<CourseDataDTO>> getAllCourses(
+      @PathVariable String universitySlug, @PathVariable String degreeProgramSlug) {
     return ResponseEntity.ok()
         .body(
-            courseService.getAllCourses(universitySlug).stream()
+            courseService.getAllCourses(universitySlug, degreeProgramSlug).stream()
                 .map(courseMapper::toDataDTO)
                 .toList());
   }
 
   /**
-   * Get a course
+   * Get a particular course
    *
    * @param universitySlug
+   * @param degreeProgramSlug
    * @param courseSlug
    * @return
    */
   @GetMapping(path = "/{courseSlug}")
   public ResponseEntity<CourseDataDTO> getCourse(
-      @PathVariable String universitySlug, @PathVariable String courseSlug) {
-    return ResponseEntity.ok(
-        courseMapper.toDataDTO(courseService.getCourseBySlug(universitySlug, courseSlug)));
+      @PathVariable String universitySlug,
+      @PathVariable String degreeProgramSlug,
+      @PathVariable String courseSlug) {
+    Course res = courseService.getCourse(universitySlug, degreeProgramSlug, courseSlug);
+    return ResponseEntity.ok(courseMapper.toDataDTO(res));
   }
 
   /**
    * @param universitySlug
+   * @param degreeProgramSlug
    * @param courseCreationDTO
    * @return
    */
   @PostMapping(path = "/")
   public ResponseEntity<String> addNewCourse(
-      @PathVariable String universitySlug, @ModelAttribute CourseCreationDTO courseCreationDTO) {
-    University university = universityService.getUniversityBySlug(universitySlug);
-    Course course = courseMapper.fromCreationDTO(courseCreationDTO, university);
-    courseService.addCourse(universitySlug, course);
-    // at this point if there are not any throws the entity has been created
+      @PathVariable String universitySlug,
+      @PathVariable String degreeProgramSlug,
+      @ModelAttribute CourseCreationDTO courseCreationDTO) {
+    DegreeProgram degreeProgram =
+        degreeProgramService.getDegreeProgramBySlug(universitySlug, degreeProgramSlug);
+    Course course = courseMapper.fromCreationDTO(courseCreationDTO, degreeProgram);
+    courseService.addNewCourse(universitySlug, degreeProgramSlug, course);
     String slug = course.getSlug();
     return ResponseEntity.created(
             ServletUriComponentsBuilder.fromCurrentRequestUri()
@@ -78,10 +89,30 @@ public class CourseController {
         .build();
   }
 
+  /**
+   * @param universitySlug
+   * @param degreeProgramSlug
+   * @param courseSlug
+   * @param courseDataDTO
+   * @return
+   */
+  @PutMapping("/{courseSlug}/update_ects")
+  public ResponseEntity<String> updateECTS(
+      @PathVariable String universitySlug,
+      @PathVariable String degreeProgramSlug,
+      @PathVariable String courseSlug,
+      @ModelAttribute CourseDataDTO courseDataDTO) {
+    courseService.updateCourseECTS(
+        universitySlug, degreeProgramSlug, courseSlug, courseDataDTO.ects());
+    return ResponseEntity.ok("Course updated successfully!");
+  }
+
   @DeleteMapping("/{courseSlug}")
   public ResponseEntity<String> deleteCourse(
-      @PathVariable String universitySlug, @PathVariable String courseSlug) {
-    courseService.removeCourse(universitySlug, courseSlug);
+      @PathVariable String universitySlug,
+      @PathVariable String degreeProgramSlug,
+      @PathVariable String courseSlug) {
+    courseService.removeCourse(universitySlug, degreeProgramSlug, courseSlug);
     return ResponseEntity.ok("Course deleted!");
   }
 }

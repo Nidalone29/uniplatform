@@ -1,12 +1,12 @@
 import {
-  getCourse,
   getCourses,
-  getExams,
+  getDegreeProgram,
+  getDegreePrograms,
   getUniversities,
   getUniversity,
 } from "@/api/apiCalls";
 
-export async function loadDataUni() {
+export async function loadDataUniversity() {
   const fetchedUniversities = await getUniversities().catch((error) => {
     console.error("Failed to fetch universities:", error);
     return [];
@@ -14,34 +14,44 @@ export async function loadDataUni() {
   return { universities: fetchedUniversities };
 }
 
-export async function loadDataCourse(uniID: string) {
-  const fetchedCourses = await getCourses(uniID).catch((error) => {
-    console.error("Failed to fetch courses:", error);
-    return [];
-  });
-  const fetchedUniversity = await getUniversity(uniID).catch((error) => {
-    console.error("Failed to fetch uni:", error);
-    return null;
-  });
-  return { university: fetchedUniversity, courses: fetchedCourses };
-}
-
-export async function loadDataExam(uniID: string, courseID: string) {
-  const fetchedExams = await getExams(uniID, courseID).catch((error) => {
-    console.error("Failed to fetch exams:", error);
-    return [];
-  });
-  const fetchedCourse = await getCourse(uniID, courseID).catch((error) => {
-    console.error("Failed to fetch courses:", error);
-    return null;
-  });
-  const fetchedUniversity = await getUniversity(uniID).catch((error) => {
-    console.error("Failed to fetch uni:", error);
+export async function loadDataDegreeProgram(UniID: string) {
+  const fetchedDegreePrograms = await getDegreePrograms(UniID).catch(
+    (error) => {
+      console.error("Failed to fetch degree programs:", error);
+      return [];
+    },
+  );
+  const fetchedUniversity = await getUniversity(UniID).catch((error) => {
+    console.error("Failed to fetch university:", error);
     return null;
   });
   return {
     university: fetchedUniversity,
-    course: fetchedCourse,
-    exams: fetchedExams,
+    degreePrograms: fetchedDegreePrograms,
+  };
+}
+
+export async function loadDataCourse(UniID: string, DegreeProgramID: string) {
+  const fetchedCourses = await getCourses(UniID, DegreeProgramID).catch(
+    (error) => {
+      console.error("Failed to fetch courses:", error);
+      return [];
+    },
+  );
+  const fetchedDegreeProgram = await getDegreeProgram(
+    UniID,
+    DegreeProgramID,
+  ).catch((error) => {
+    console.error("Failed to fetch degree program:", error);
+    return null;
+  });
+  const fetchedUniversity = await getUniversity(UniID).catch((error) => {
+    console.error("Failed to fetch university:", error);
+    return null;
+  });
+  return {
+    university: fetchedUniversity,
+    degreeProgram: fetchedDegreeProgram,
+    courses: fetchedCourses,
   };
 }

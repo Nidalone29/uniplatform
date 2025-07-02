@@ -1,7 +1,7 @@
 import ky from "ky";
 
 import type { Course } from "@/types/course";
-import type { Exam } from "@/types/exam";
+import type { DegreeProgram } from "@/types/degreeProgram";
 import type { University } from "@/types/university";
 
 export async function getUniversities(): Promise<University[]> {
@@ -10,9 +10,9 @@ export async function getUniversities(): Promise<University[]> {
     .json<University[]>();
 }
 
-export async function getUniversity(uni: string): Promise<University> {
+export async function getUniversity(university: string): Promise<University> {
   return await ky
-    .get("http://localhost:8080/api/universities/" + uni)
+    .get("http://localhost:8080/api/universities/" + university)
     .json<University>();
 }
 
@@ -22,104 +22,138 @@ export async function addUniversity(uniData: URLSearchParams) {
   });
 }
 
-export async function deleteUniversity(uni: string) {
-  return await ky.delete("http://localhost:8080/api/universities/" + uni);
+export async function deleteUniversity(university: string) {
+  return await ky.delete(
+    "http://localhost:8080/api/universities/" + university,
+  );
 }
 
-export async function getCourses(uni: string): Promise<Course[]> {
+export async function getDegreePrograms(
+  university: string,
+): Promise<DegreeProgram[]> {
   return await ky
-    .get("http://localhost:8080/api/universities/" + uni + "/courses/")
+    .get(
+      "http://localhost:8080/api/universities/" +
+        university +
+        "/degree-programs/",
+    )
+    .json<DegreeProgram[]>();
+}
+
+export async function getDegreeProgram(
+  university: string,
+  degreeProgram: string,
+): Promise<DegreeProgram> {
+  return await ky
+    .get(
+      "http://localhost:8080/api/universities/" +
+        university +
+        "/degree-programs/" +
+        degreeProgram,
+    )
+    .json<DegreeProgram>();
+}
+
+export async function addDegreeProgram(
+  university: string,
+  degreeProgramData: URLSearchParams,
+) {
+  return await ky.post(
+    "http://localhost:8080/api/universities/" +
+      university +
+      "/degree-programs/",
+    { body: degreeProgramData },
+  );
+}
+
+export async function deleteDegreeProgram(
+  university: string,
+  degreeProgram: string,
+) {
+  return await ky.delete(
+    "http://localhost:8080/api/universities/" +
+      university +
+      "/degree-programs/" +
+      degreeProgram,
+  );
+}
+
+export async function getCourses(
+  university: string,
+  degreeProgram: string,
+): Promise<Course[]> {
+  return await ky
+    .get(
+      "http://localhost:8080/api/universities/" +
+        university +
+        "/degree-programs/" +
+        degreeProgram +
+        "/courses/",
+    )
     .json<Course[]>();
 }
 
-export async function getCourse(uni: string, course: string): Promise<Course> {
+export async function getCourse(
+  university: string,
+  degreeProgram: string,
+  course: string,
+): Promise<Course> {
   return await ky
-    .get("http://localhost:8080/api/universities/" + uni + "/courses/" + course)
+    .get(
+      "http://localhost:8080/api/universities/" +
+        university +
+        "/degree-programs/" +
+        degreeProgram +
+        "/courses/" +
+        course,
+    )
     .json<Course>();
 }
 
-export async function addCourse(uni: string, courseData: URLSearchParams) {
+export async function addCourse(
+  university: string,
+  degreeProgram: string,
+  courseData: URLSearchParams,
+) {
   return await ky.post(
-    "http://localhost:8080/api/universities/" + uni + "/courses/",
+    "http://localhost:8080/api/universities/" +
+      university +
+      "/degree-programs/" +
+      degreeProgram +
+      "/courses/",
     { body: courseData },
   );
 }
 
-export async function deleteCourse(uni: string, course: string) {
-  return await ky.delete(
-    "http://localhost:8080/api/universities/" + uni + "/courses/" + course,
-  );
-}
-
-export async function getExams(uni: string, course: string): Promise<Exam[]> {
-  return await ky
-    .get(
-      "http://localhost:8080/api/universities/" +
-        uni +
-        "/courses/" +
-        course +
-        "/exams/",
-    )
-    .json<Exam[]>();
-}
-
-export async function getExam(
-  uni: string,
+export async function updateCourse(
+  university: string,
+  degreeProgram: string,
   course: string,
-  exam: string,
-): Promise<Exam> {
-  return await ky
-    .get(
-      "http://localhost:8080/api/universities/" +
-        uni +
-        "/courses/" +
-        course +
-        "/exams/" +
-        exam,
-    )
-    .json<Exam>();
-}
-
-export async function addExam(
-  uni: string,
-  course: string,
-  examData: URLSearchParams,
-) {
-  return await ky.post(
-    "http://localhost:8080/api/universities/" +
-      uni +
-      "/courses/" +
-      course +
-      "/exams/",
-    { body: examData },
-  );
-}
-
-export async function updateExam(
-  uni: string,
-  course: string,
-  exam: string,
   search_params: URLSearchParams,
 ) {
   return await ky.put(
     "http://localhost:8080/api/universities/" +
-      uni +
+      university +
+      "/degree-programs/" +
+      degreeProgram +
       "/courses/" +
       course +
-      "/exams/" +
-      exam +
       "/update_ects",
     { body: search_params },
   );
 }
 
-export async function deleteExam(uni: string, course: string, exam: string) {
+export async function deleteCourse(
+  university: string,
+  degreeProgram: string,
+  course: string,
+) {
   return await ky.delete(
     "http://localhost:8080/api/universities/" +
-      uni +
+      university +
+      "/degree-programs/" +
+      degreeProgram +
       "/courses/" +
-      course +
-      "/exams/" +
-      exam,
+      course,
   );
 }

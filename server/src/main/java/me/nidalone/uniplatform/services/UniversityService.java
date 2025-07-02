@@ -12,5 +12,5 @@ public interface UniversityService {
 
   void addNewUniversity(University university);
 
-  void deleteUniversityBySlug(String universityID);
+  void deleteUniversityBySlug(String universitySlug);
 }

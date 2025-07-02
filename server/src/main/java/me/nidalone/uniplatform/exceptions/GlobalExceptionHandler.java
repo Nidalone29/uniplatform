@@ -9,9 +9,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class GlobalExceptionHandler {
   @ResponseBody
-  @ExceptionHandler(UniNotFoundException.class)
+  @ExceptionHandler(UniversityNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  String uniNotFoundHandler(UniNotFoundException ex) {
+  String universityNotFoundHandler(UniversityNotFoundException ex) {
+    return ex.getMessage();
+  }
+
+  @ResponseBody
+  @ExceptionHandler(DegreeProgramNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  String degreeProgramNotFoundHandler(DegreeProgramNotFoundException ex) {
     return ex.getMessage();
   }
 
@@ -23,16 +30,16 @@ public class GlobalExceptionHandler {
   }
 
   @ResponseBody
-  @ExceptionHandler(ExamNotFoundException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  String examNotFoundHandler(ExamNotFoundException ex) {
+  @ExceptionHandler(UniversityAlreadyExistsException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  String universityAlreadyExistsException(UniversityAlreadyExistsException ex) {
     return ex.getMessage();
   }
 
   @ResponseBody
-  @ExceptionHandler(UniAlreadyExistsException.class)
+  @ExceptionHandler(DegreeProgramAlreadyExistsException.class)
   @ResponseStatus(HttpStatus.FORBIDDEN)
-  String uniAlreadyExistsException(UniAlreadyExistsException ex) {
+  String degreeProgramAlreadyExistsException(DegreeProgramAlreadyExistsException ex) {
     return ex.getMessage();
   }
 
@@ -40,13 +47,6 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(CourseAlreadyExistsException.class)
   @ResponseStatus(HttpStatus.FORBIDDEN)
   String courseAlreadyExistsException(CourseAlreadyExistsException ex) {
-    return ex.getMessage();
-  }
-
-  @ResponseBody
-  @ExceptionHandler(ExamAlreadyExistsException.class)
-  @ResponseStatus(HttpStatus.FORBIDDEN)
-  String examAlreadyExistsException(ExamAlreadyExistsException ex) {
     return ex.getMessage();
   }
 }

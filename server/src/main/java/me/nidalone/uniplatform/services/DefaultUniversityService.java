@@ -1,8 +1,8 @@
 package me.nidalone.uniplatform.services;
 
 import me.nidalone.uniplatform.domain.entities.University;
-import me.nidalone.uniplatform.exceptions.UniAlreadyExistsException;
-import me.nidalone.uniplatform.exceptions.UniNotFoundException;
+import me.nidalone.uniplatform.exceptions.UniversityAlreadyExistsException;
+import me.nidalone.uniplatform.exceptions.UniversityNotFoundException;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class DefaultUniversityService implements UniversityService {
   public University getUniversityBySlug(String universitySlug) {
     return universityRepository
         .findBySlug(universitySlug)
-        .orElseThrow(() -> new UniNotFoundException(universitySlug));
+        .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
   }
 
   @Override
@@ -42,7 +42,7 @@ public class DefaultUniversityService implements UniversityService {
 
     Optional<University> uni = universityRepository.findBySlug(university.getSlug());
     if (uni.isPresent()) {
-      throw new UniAlreadyExistsException(university.getName());
+      throw new UniversityAlreadyExistsException(university.getName());
     }
 
     universityRepository.save(university);
@@ -53,7 +53,7 @@ public class DefaultUniversityService implements UniversityService {
     University uni =
         universityRepository
             .findBySlug(universitySlug)
-            .orElseThrow(() -> new UniNotFoundException(universitySlug));
+            .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
 
     universityRepository.delete(uni);
   }

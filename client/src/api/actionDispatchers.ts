@@ -1,12 +1,16 @@
 import type { ActionFunctionArgs } from "react-router";
 
-import { addDataCourse, addDataExam, addDataUni } from "@/api/addData";
+import {
+  addDataCourse,
+  addDataDegreeProgram,
+  addDataUniversity,
+} from "@/api/addData";
 import {
   deleteDataCourse,
-  deleteDataExam,
+  deleteDataDegreeProgram,
   deleteDataUni,
 } from "@/api/deleteData";
-import { editDataExam } from "@/api/editData";
+import { editDataCourse } from "@/api/editData";
 import { ContentToURLSearchParams } from "@/lib/utils";
 import type { ActionDispatcherRequest } from "@/types/ActionDispatcherRequest";
 
@@ -26,7 +30,7 @@ export async function manipulateUniversitiesDispatcher({
   switch (intent) {
     case "add": {
       const searchParams = ContentToURLSearchParams(content!);
-      return addDataUni(searchParams);
+      return addDataUniversity(searchParams);
     }
     case "edit": {
       // unsupported for now
@@ -41,12 +45,44 @@ export async function manipulateUniversitiesDispatcher({
   }
 }
 
+export async function manipulateDegreeProgramDispatcher({
+  request,
+  params,
+}: ActionFunctionArgs) {
+  // these are "guaranteed" by react-router
+  const university_slug: string = params.UniID!;
+
+  const {
+    intent,
+    slug: degreeProgram_slug,
+    content,
+  }: ActionDispatcherRequest = await request.json();
+
+  switch (intent) {
+    case "add": {
+      const searchParams = ContentToURLSearchParams(content!);
+      return addDataDegreeProgram(university_slug, searchParams);
+    }
+    case "edit": {
+      // unsupported for now
+      return;
+    }
+    case "delete": {
+      return deleteDataDegreeProgram(university_slug, degreeProgram_slug!);
+    }
+    default: {
+      throw new Error("Unknown action");
+    }
+  }
+}
+
 export async function manipulateCoursesDispatcher({
   request,
   params,
 }: ActionFunctionArgs) {
   // these are "guaranteed" by react-router
   const university_slug: string = params.UniID!;
+  const degreeProgram_slug: string = params.DegreeProgramID!;
 
   const {
     intent,
@@ -57,51 +93,23 @@ export async function manipulateCoursesDispatcher({
   switch (intent) {
     case "add": {
       const searchParams = ContentToURLSearchParams(content!);
-      return addDataCourse(university_slug, searchParams);
-    }
-    case "edit": {
-      // unsupported for now
-      return;
-    }
-    case "delete": {
-      return deleteDataCourse(university_slug, course_slug!);
-    }
-    default: {
-      throw new Error("Unknown action");
-    }
-  }
-}
-
-export async function manipulateExamsDispatcher({
-  request,
-  params,
-}: ActionFunctionArgs) {
-  // these are "guaranteed" by react-router
-  const university_slug: string = params.UniID!;
-  const course_slug: string = params.CourseID!;
-
-  const {
-    intent,
-    slug: exam_slug,
-    content,
-  }: ActionDispatcherRequest = await request.json();
-
-  switch (intent) {
-    case "add": {
-      const searchParams = ContentToURLSearchParams(content!);
-      return addDataExam(university_slug, course_slug, searchParams);
+      return addDataCourse(university_slug, degreeProgram_slug, searchParams);
     }
     case "edit": {
       const searchParams = ContentToURLSearchParams(content!);
-      return editDataExam(
+      return editDataCourse(
         searchParams,
         university_slug,
-        course_slug,
-        exam_slug!,
+        degreeProgram_slug,
+        course_slug!,
       );
     }
     case "delete": {
-      return deleteDataExam(university_slug, course_slug, exam_slug!);
+      return deleteDataCourse(
+        university_slug,
+        degreeProgram_slug,
+        course_slug!,
+      );
     }
     default: {
       throw new Error("Unknown action");

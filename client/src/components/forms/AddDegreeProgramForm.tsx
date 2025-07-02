@@ -14,33 +14,34 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { useFormFetcher } from "@/hooks/useFormFetcher";
-import { EditExamFormSchema, type Exam } from "@/types/exam";
+import {
+  AddDegreeProgramFormSchema,
+  type DegreeProgram,
+} from "@/types/degreeProgram";
 import type { FormInDialogProps } from "@/types/formTypes";
 
-export function ModifyExamForm({
-  formData,
+export function AddDegreeProgramForm({
   formId,
   closingFunct,
   formStateFunct,
-}: FormInDialogProps<Exam>) {
-  const current_exam: Exam = formData!;
+}: FormInDialogProps<DegreeProgram>) {
   const { submissionState, submitFunction } = useFormFetcher(closingFunct);
 
   useEffect(() => {
     formStateFunct!(submissionState);
   }, [formStateFunct, submissionState]);
 
-  const form = useForm<z.infer<typeof EditExamFormSchema>>({
-    resolver: zodResolver(EditExamFormSchema),
+  const form = useForm<z.infer<typeof AddDegreeProgramFormSchema>>({
+    resolver: zodResolver(AddDegreeProgramFormSchema),
     defaultValues: {
-      ects: current_exam.ects,
+      name: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof EditExamFormSchema>) {
+  function onSubmit(data: z.infer<typeof AddDegreeProgramFormSchema>) {
     formStateFunct!(true); // just for making this feel more "snappy"
     submitFunction(
-      { intent: "edit", slug: current_exam.slug, content: data },
+      { intent: "add", content: data },
       { method: "POST", encType: "application/json" },
     );
   }
@@ -54,12 +55,12 @@ export function ModifyExamForm({
       >
         <FormField
           control={form.control}
-          name="ects"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>ECTS</FormLabel>
+              <FormLabel>Degree Program Name</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="new ects" {...field} />
+                <Input placeholder="Computer science" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

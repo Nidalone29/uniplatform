@@ -26,12 +26,12 @@ public class University {
   @OneToMany(
       mappedBy = "uni",
       cascade = {CascadeType.ALL})
-  private List<Course> courses;
+  private List<DegreeProgram> degreePrograms;
 
-  public University(String name, List<Course> courses) {
+  public University(String name, List<DegreeProgram> degreePrograms) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
-    this.courses = courses;
+    this.degreePrograms = degreePrograms;
   }
 
   public University(String name) {
@@ -58,12 +58,12 @@ public class University {
     return slug;
   }
 
-  public List<Course> getCourses() {
-    return courses;
+  public List<DegreeProgram> getDegreePrograms() {
+    return degreePrograms;
   }
 
-  public void setCourses(List<Course> courses) {
-    this.courses = courses;
+  public void setDegreePrograms(List<DegreeProgram> degreePrograms) {
+    this.degreePrograms = degreePrograms;
   }
 
   @Override
@@ -73,28 +73,28 @@ public class University {
     return Objects.equals(universityID, that.universityID)
         && Objects.equals(name, that.name)
         && Objects.equals(slug, that.slug)
-        && Objects.equals(courses, that.courses);
+        && Objects.equals(degreePrograms, that.degreePrograms);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(universityID, name, slug, courses);
+    return Objects.hash(universityID, name, slug, degreePrograms);
   }
 
-  public Optional<Course> findCourse(String courseName) {
-    for (Course x : this.courses) {
-      if (x.getName().equals(courseName)) {
+  public Optional<DegreeProgram> findDegreeProgram(String degreeProgram) {
+    for (DegreeProgram x : this.degreePrograms) {
+      if (x.getName().equals(degreeProgram)) {
         return Optional.of(x);
       }
     }
     return Optional.empty();
   }
 
-  public void deleteCourse(Course course) {
-    this.courses.remove(course);
+  public void deleteDegreeProgram(DegreeProgram degreeProgram) {
+    this.degreePrograms.remove(degreeProgram);
   }
 
-  public void addCourse(Course course) {
-    courses.add(course);
+  public void addDegreeProgram(DegreeProgram degreeProgram) {
+    this.degreePrograms.add(degreeProgram);
   }
 }

@@ -3,15 +3,13 @@ package me.nidalone.uniplatform.domain.entities;
 import jakarta.persistence.*;
 import me.nidalone.uniplatform.utils.SlugUtil;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Entity
 @Table(
     name = "courses",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"course_slug", "university_id"})})
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"course_slug", "degree_program_id"})})
 public class Course {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -24,40 +22,32 @@ public class Course {
   @Column(name = "course_slug", nullable = false)
   private String slug;
 
-  @OneToMany(
-      mappedBy = "course",
-      cascade = {CascadeType.ALL})
-  private List<Exam> exams;
+  @Column(name = "ects")
+  private int ects;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "university_id")
-  private University uni;
+  @JoinColumn(name = "degree_program_id")
+  private DegreeProgram degreeProgram;
 
-  public Course(String name, List<Exam> exams, University uni) {
+  public Course(String name, int ects, DegreeProgram degreeProgram) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
-    this.exams = exams;
-    this.uni = uni;
-  }
-
-  public Course(String name, University uni) {
-    this.name = name;
-    this.slug = SlugUtil.toSlug(name);
-    this.uni = uni;
+    this.ects = ects;
+    this.degreeProgram = degreeProgram;
   }
 
   public Course() {}
 
-  public UUID getCourseID() {
+  public UUID getExamID() {
     return courseID;
   }
 
-  public List<Exam> getExams() {
-    return exams;
+  public DegreeProgram getCourse() {
+    return degreeProgram;
   }
 
-  public void setExams(List<Exam> exams) {
-    this.exams = exams;
+  public void setCourse(DegreeProgram degreeProgram) {
+    this.degreeProgram = degreeProgram;
   }
 
   public String getName() {
@@ -72,40 +62,27 @@ public class Course {
     return slug;
   }
 
-  public University getUni() {
-    return uni;
+  public int getEcts() {
+    return ects;
   }
 
-  public void setUni(University uni) {
-    this.uni = uni;
+  public void setEcts(int ects) {
+    this.ects = ects;
   }
 
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;
     Course course = (Course) o;
-    return Objects.equals(courseID, course.courseID)
+    return ects == course.ects
+        && Objects.equals(courseID, course.courseID)
         && Objects.equals(name, course.name)
         && Objects.equals(slug, course.slug)
-        && Objects.equals(exams, course.exams)
-        && Objects.equals(uni, course.uni);
+        && Objects.equals(degreeProgram, course.degreeProgram);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(courseID, name, slug, exams, uni);
-  }
-
-  public Optional<Exam> findExam(String exam) {
-    for (Exam e : this.exams) {
-      if (e.getName().equals(exam)) {
-        return Optional.of(e);
-      }
-    }
-    return Optional.empty();
-  }
-
-  public void addExam(Exam exam) {
-    this.exams.add(exam);
+    return Objects.hash(courseID, name, slug, ects, degreeProgram);
   }
 }

@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-import type { Course } from "@/types/course";
+import type { DegreeProgram } from "@/types/degreeProgram";
 
 interface University {
   name: string;
   slug: string;
-  courses: Course[];
+  degree_programs: DegreeProgram[];
 }
 
 // TODO the schemas will all be eventually generated via https://github.com/orval-labs/orval

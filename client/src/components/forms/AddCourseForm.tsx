@@ -32,6 +32,7 @@ export function AddCourseForm({
     resolver: zodResolver(AddCourseFormSchema),
     defaultValues: {
       name: "",
+      ects: 8,
     },
   });
 
@@ -57,7 +58,20 @@ export function AddCourseForm({
             <FormItem>
               <FormLabel>Course Name</FormLabel>
               <FormControl>
-                <Input placeholder="Computer science" {...field} />
+                <Input placeholder="Calculus 1" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="ects"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>ECTS</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="ects" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

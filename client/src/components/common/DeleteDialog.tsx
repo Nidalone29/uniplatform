@@ -51,8 +51,8 @@ export function DeleteDialog<T extends Entities>({
           </DialogTitle>
         </DialogHeader>
         <p>
-          This will also delete any courses or exams associated with {data.name}
-          , if there are any.
+          This will also delete any degree program or course associated with{" "}
+          {data.name}, if there are any.
         </p>
         <DialogFooter>
           <DialogClose asChild>

@@ -1,7 +1,10 @@
 import type { z } from "zod";
 
 import { AddCourseFormSchema, EditCourseFormSchema } from "@/types/course";
-import { AddExamFormSchema, EditExamFormSchema } from "@/types/exam";
+import {
+  AddDegreeProgramFormSchema,
+  EditDegreeProgramFormSchema,
+} from "@/types/degreeProgram";
 import {
   AddUniversityFormSchema,
   EditUniversityFormSchema,
@@ -9,13 +12,13 @@ import {
 
 export type AddContentType =
   | z.infer<typeof AddUniversityFormSchema>
-  | z.infer<typeof AddCourseFormSchema>
-  | z.infer<typeof AddExamFormSchema>;
+  | z.infer<typeof AddDegreeProgramFormSchema>
+  | z.infer<typeof AddCourseFormSchema>;
 
 export type EditContentType =
   | z.infer<typeof EditUniversityFormSchema>
-  | z.infer<typeof EditCourseFormSchema>
-  | z.infer<typeof EditExamFormSchema>;
+  | z.infer<typeof EditDegreeProgramFormSchema>
+  | z.infer<typeof EditCourseFormSchema>;
 
 export type PossibleContentType = AddContentType | EditContentType;
 
