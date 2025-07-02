@@ -9,3 +9,11 @@ This project will serve as an example in the near future for experimenting with 
 
 - Implement the test suite
 - Add more data to the entities
+
+## Run Locally
+
+Create a `.env` file in the root of the project based on `.env.example`, and then simply run:
+
+```sh
+docker compose -f "compose.yaml" up -d --build 
+```
