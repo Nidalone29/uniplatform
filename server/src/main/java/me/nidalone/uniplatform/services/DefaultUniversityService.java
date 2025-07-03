@@ -1,9 +1,13 @@
 package me.nidalone.uniplatform.services;
 
+import com.neovisionaries.i18n.CountryCode;
+import me.nidalone.uniplatform.domain.dto.UniversityCreationDTO;
 import me.nidalone.uniplatform.domain.entities.University;
 import me.nidalone.uniplatform.exceptions.UniversityAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.UniversityNotFoundException;
+import me.nidalone.uniplatform.mappers.UniversityMapper;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
+import me.nidalone.uniplatform.utils.SlugUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +16,12 @@ import java.util.Optional;
 @Service
 public class DefaultUniversityService implements UniversityService {
   private final UniversityRepository universityRepository;
+  private final UniversityMapper universityMapper;
 
-  public DefaultUniversityService(UniversityRepository universityRepository) {
+  public DefaultUniversityService(
+      UniversityRepository universityRepository, UniversityMapper universityMapper) {
     this.universityRepository = universityRepository;
+    this.universityMapper = universityMapper;
   }
 
   @Override
@@ -30,22 +37,23 @@ public class DefaultUniversityService implements UniversityService {
   }
 
   @Override
-  public void addNewUniversity(University university) {
-    if (university.getName().isEmpty()) {
+  public String addNewUniversity(UniversityCreationDTO universityCreationDTO) {
+    final String uni_name = universityCreationDTO.name();
+    if (uni_name.isEmpty()) {
       throw new IllegalArgumentException();
     }
 
-    if (university.getSlug().isEmpty()) {
-      // It means that the university was created with no parameters somehow
-      throw new RuntimeException();
-    }
-
-    Optional<University> uni = universityRepository.findBySlug(university.getSlug());
+    Optional<University> uni = universityRepository.findBySlug(SlugUtil.toSlug(uni_name));
     if (uni.isPresent()) {
-      throw new UniversityAlreadyExistsException(university.getName());
+      throw new UniversityAlreadyExistsException(uni_name);
     }
 
+    Optional.ofNullable(CountryCode.getByAlpha2Code(universityCreationDTO.country_code()))
+        .orElseThrow(() -> new IllegalArgumentException("Country not found"));
+
+    University university = universityMapper.fromCreationDTO(universityCreationDTO);
     universityRepository.save(university);
+    return university.getSlug();
   }
 
   @Override

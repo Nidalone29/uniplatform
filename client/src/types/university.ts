@@ -5,6 +5,7 @@ import type { DegreeProgram } from "@/types/degreeProgram";
 interface University {
   name: string;
   slug: string;
+  country_code: string;
   degree_programs: DegreeProgram[];
 }
 
@@ -12,6 +13,9 @@ interface University {
 const AddUniversityFormSchema = z.object({
   name: z.string().min(2, {
     message: "University name must be at least 2 characters.",
+  }),
+  country_code: z.string().length(2, {
+    message: "University country must be in ISO 3166 alpha 2 format.",
   }),
 });
 

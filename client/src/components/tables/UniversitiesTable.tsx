@@ -1,3 +1,4 @@
+import ReactCountryFlag from "react-country-flag";
 import { useLoaderData, useNavigate } from "react-router";
 
 import {
@@ -31,6 +32,7 @@ export function UniversitiesTable() {
           <TableHeader className="bg-card">
             <TableRow>
               <TableHead className="w-[100px]">University name</TableHead>
+              <TableHead className="w-[100px]">Country</TableHead>
               <TableHead></TableHead>
               <TableHead className="w-[104px] text-center">Edit</TableHead>
             </TableRow>
@@ -43,6 +45,9 @@ export function UniversitiesTable() {
                 }}
               >
                 <TableCell className="font-medium">{university.name}</TableCell>
+                <TableCell className="font-medium">
+                  <ReactCountryFlag countryCode={university.country_code} svg />
+                </TableCell>
                 <TableCell></TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">

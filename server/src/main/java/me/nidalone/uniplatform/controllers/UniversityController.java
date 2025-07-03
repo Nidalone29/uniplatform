@@ -4,7 +4,6 @@ import java.util.List;
 
 import me.nidalone.uniplatform.domain.dto.UniversityCreationDTO;
 import me.nidalone.uniplatform.domain.dto.UniversityDataDTO;
-import me.nidalone.uniplatform.domain.entities.University;
 import me.nidalone.uniplatform.mappers.UniversityMapper;
 import me.nidalone.uniplatform.services.UniversityService;
 import org.springframework.http.ResponseEntity;
@@ -58,10 +57,7 @@ public class UniversityController {
   @PostMapping(path = "/")
   public ResponseEntity<String> addNewUniversity(
       @ModelAttribute UniversityCreationDTO universityCreationDTO) {
-    University university = universityMapper.fromCreationDTO(universityCreationDTO);
-    universityService.addNewUniversity(university);
-    // at this point if there are not any throws the entity has been created
-    String slug = university.getSlug();
+    String slug = universityService.addNewUniversity(universityCreationDTO);
     return ResponseEntity.created(
             ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{slug}")

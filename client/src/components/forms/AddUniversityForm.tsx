@@ -63,6 +63,20 @@ export function AddUniversityForm({
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="country_code"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>University Country</FormLabel>
+              <FormControl>
+                <Input placeholder="Country in ISO 3166" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </form>
     </Form>
   );

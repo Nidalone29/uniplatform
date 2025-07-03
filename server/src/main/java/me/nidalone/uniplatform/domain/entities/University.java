@@ -1,11 +1,9 @@
 package me.nidalone.uniplatform.domain.entities;
 
+import com.neovisionaries.i18n.CountryCode;
 import jakarta.persistence.*;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import me.nidalone.uniplatform.utils.SlugUtil;
 
@@ -23,20 +21,27 @@ public class University {
   @Column(name = "university_slug", nullable = false, unique = true)
   private String slug;
 
+  // This is an ISO 3166 code
+  @Column(name = "university_country", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private CountryCode country;
+
   @OneToMany(
       mappedBy = "uni",
       cascade = {CascadeType.ALL})
   private List<DegreeProgram> degreePrograms;
 
-  public University(String name, List<DegreeProgram> degreePrograms) {
+  public University(String name, List<DegreeProgram> degreePrograms, CountryCode country) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
     this.degreePrograms = degreePrograms;
+    this.country = country;
   }
 
-  public University(String name) {
+  public University(String name, CountryCode country) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
+    this.country = country;
   }
 
   public University() {}
@@ -64,6 +69,18 @@ public class University {
 
   public void setDegreePrograms(List<DegreeProgram> degreePrograms) {
     this.degreePrograms = degreePrograms;
+  }
+
+  public String getCountryAsISOAlpha2() {
+    return country.getAlpha2();
+  }
+
+  public CountryCode getCountry() {
+    return country;
+  }
+
+  public void setCountry(CountryCode country) {
+    this.country = country;
   }
 
   @Override
