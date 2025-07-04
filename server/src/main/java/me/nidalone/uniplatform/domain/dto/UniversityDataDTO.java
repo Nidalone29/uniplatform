@@ -1,4 +1,4 @@
 package me.nidalone.uniplatform.domain.dto;
 
-// This DTO is used for both the Form and retrieval
-public record UniversityDataDTO(String name, String slug, String country_code, String acronym) {}
+public record UniversityDataDTO(
+    String name, String slug, String country_code, String acronym, int number_of_programs) {}

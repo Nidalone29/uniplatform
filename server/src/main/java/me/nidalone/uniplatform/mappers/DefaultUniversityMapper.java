@@ -23,6 +23,7 @@ public class DefaultUniversityMapper implements UniversityMapper {
         university.getName(),
         university.getSlug(),
         university.getCountryAsISOAlpha2(),
-        university.getAcronym());
+        university.getAcronym(),
+        university.getDegreePrograms().size());
   }
 }

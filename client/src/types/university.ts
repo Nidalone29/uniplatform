@@ -7,6 +7,7 @@ interface University {
   slug: string;
   country_code: string;
   acronym?: string;
+  number_of_programs: number;
   degree_programs: DegreeProgram[];
 }
 

@@ -17,3 +17,7 @@ export function ContentToURLSearchParams(
   }
   return searchParams;
 }
+
+export const regionNamesInEnglish = new Intl.DisplayNames(["en"], {
+  type: "region",
+});
