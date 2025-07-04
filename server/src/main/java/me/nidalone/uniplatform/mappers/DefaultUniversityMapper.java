@@ -13,12 +13,16 @@ public class DefaultUniversityMapper implements UniversityMapper {
   public University fromCreationDTO(UniversityCreationDTO universityCreationDTO) {
     return new University(
         universityCreationDTO.name(),
-        CountryCode.getByAlpha2Code(universityCreationDTO.country_code()));
+        CountryCode.getByAlpha2Code(universityCreationDTO.country_code()),
+        universityCreationDTO.acronym());
   }
 
   @Override
   public UniversityDataDTO toDataDTO(University university) {
     return new UniversityDataDTO(
-        university.getName(), university.getSlug(), university.getCountryAsISOAlpha2());
+        university.getName(),
+        university.getSlug(),
+        university.getCountryAsISOAlpha2(),
+        university.getAcronym());
   }
 }

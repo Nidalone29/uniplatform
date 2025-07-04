@@ -62,8 +62,20 @@ export function AddUniversityForm({
               <FormMessage />
             </FormItem>
           )}
+        />{" "}
+        <FormField
+          control={form.control}
+          name="acronym"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>University Acronym</FormLabel>
+              <FormControl>
+                <Input placeholder="TU..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-
         <FormField
           control={form.control}
           name="country_code"

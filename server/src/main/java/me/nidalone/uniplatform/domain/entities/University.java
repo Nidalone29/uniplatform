@@ -26,16 +26,35 @@ public class University {
   @Enumerated(EnumType.STRING)
   private CountryCode country;
 
+  @Column(name = "university_acronym")
+  private String acronym;
+
   @OneToMany(
       mappedBy = "uni",
       cascade = {CascadeType.ALL})
   private List<DegreeProgram> degreePrograms;
+
+  public University(
+      String name, List<DegreeProgram> degreePrograms, CountryCode country, String acronym) {
+    this.name = name;
+    this.slug = SlugUtil.toSlug(name);
+    this.degreePrograms = degreePrograms;
+    this.country = country;
+    this.acronym = acronym;
+  }
 
   public University(String name, List<DegreeProgram> degreePrograms, CountryCode country) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
     this.degreePrograms = degreePrograms;
     this.country = country;
+  }
+
+  public University(String name, CountryCode country, String acronym) {
+    this.name = name;
+    this.slug = SlugUtil.toSlug(name);
+    this.country = country;
+    this.acronym = acronym;
   }
 
   public University(String name, CountryCode country) {
@@ -81,6 +100,14 @@ public class University {
 
   public void setCountry(CountryCode country) {
     this.country = country;
+  }
+
+  public String getAcronym() {
+    return acronym;
+  }
+
+  public void setAcronym(String acronym) {
+    this.acronym = acronym;
   }
 
   @Override

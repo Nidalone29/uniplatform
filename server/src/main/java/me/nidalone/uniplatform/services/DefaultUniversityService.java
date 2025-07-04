@@ -41,17 +41,27 @@ public class DefaultUniversityService implements UniversityService {
   @Override
   public String addNewUniversity(UniversityCreationDTO universityCreationDTO) {
     final String uni_name = universityCreationDTO.name();
-    if (uni_name.isEmpty()) {
+    if (uni_name == null || uni_name.isEmpty()) {
+      throw new IllegalArgumentException("Invalid name");
+    }
+
+    Optional.ofNullable(universityRepository.findBySlug(SlugUtil.toSlug(uni_name)))
+        .orElseThrow(() -> new UniversityAlreadyExistsException(uni_name));
+
+    // getByAlpha2Code throws "Name is null" when you don't provide a country_code
+    CountryCode cc =
+        Optional.ofNullable(CountryCode.getByAlpha2Code(universityCreationDTO.country_code()))
+            .orElseThrow(() -> new IllegalArgumentException("Country not found"));
+    if (cc.getAssignment() != CountryCode.Assignment.OFFICIALLY_ASSIGNED) {
+      throw new IllegalArgumentException("Country not officially assigned");
+    }
+
+    final String uni_acronym = universityCreationDTO.acronym();
+    if (uni_acronym != null
+        && !uni_acronym.isEmpty()
+        && (uni_acronym.length() < 3 || uni_acronym.length() > 15)) {
       throw new IllegalArgumentException();
     }
-
-    Optional<University> uni = universityRepository.findBySlug(SlugUtil.toSlug(uni_name));
-    if (uni.isPresent()) {
-      throw new UniversityAlreadyExistsException(uni_name);
-    }
-
-    Optional.ofNullable(CountryCode.getByAlpha2Code(universityCreationDTO.country_code()))
-        .orElseThrow(() -> new IllegalArgumentException("Country not found"));
 
     University university = universityMapper.fromCreationDTO(universityCreationDTO);
     universityRepository.save(university);
