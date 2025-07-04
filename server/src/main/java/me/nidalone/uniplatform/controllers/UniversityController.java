@@ -4,7 +4,6 @@ import java.util.List;
 
 import me.nidalone.uniplatform.domain.dto.UniversityCreationDTO;
 import me.nidalone.uniplatform.domain.dto.UniversityDataDTO;
-import me.nidalone.uniplatform.mappers.UniversityMapper;
 import me.nidalone.uniplatform.services.UniversityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +13,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping(path = "/api/universities")
 public class UniversityController {
   private final UniversityService universityService;
-  private final UniversityMapper universityMapper;
 
-  public UniversityController(
-      UniversityService universityService, UniversityMapper universityMapper) {
+  public UniversityController(UniversityService universityService) {
     this.universityService = universityService;
-    this.universityMapper = universityMapper;
   }
 
   /**
@@ -30,8 +26,7 @@ public class UniversityController {
    */
   @GetMapping(path = "/{universitySlug}")
   public ResponseEntity<UniversityDataDTO> getUniversity(@PathVariable String universitySlug) {
-    return ResponseEntity.ok()
-        .body(universityMapper.toDataDTO(universityService.getUniversityBySlug(universitySlug)));
+    return ResponseEntity.ok().body(universityService.getUniversityBySlug(universitySlug));
   }
 
   /**
@@ -41,11 +36,7 @@ public class UniversityController {
    */
   @GetMapping(path = "/")
   public ResponseEntity<List<UniversityDataDTO>> getAllUniversities() {
-    return ResponseEntity.ok()
-        .body(
-            universityService.getAllUniversities().stream()
-                .map(universityMapper::toDataDTO)
-                .toList());
+    return ResponseEntity.ok().body(universityService.getAllUniversities());
   }
 
   /**

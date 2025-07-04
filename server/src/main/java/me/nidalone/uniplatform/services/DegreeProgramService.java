@@ -1,16 +1,17 @@
 package me.nidalone.uniplatform.services;
 
-import me.nidalone.uniplatform.domain.entities.DegreeProgram;
+import me.nidalone.uniplatform.domain.dto.DegreeProgramCreationDTO;
+import me.nidalone.uniplatform.domain.dto.DegreeProgramDataDTO;
 
 import java.util.List;
 
 public interface DegreeProgramService {
 
-  DegreeProgram getDegreeProgramBySlug(String universitySlug, String degreeProgramSlug);
+  DegreeProgramDataDTO getDegreeProgramBySlug(String universitySlug, String degreeProgramSlug);
 
-  List<DegreeProgram> getAllDegreePrograms(String universitySlug);
+  List<DegreeProgramDataDTO> getAllDegreePrograms(String universitySlug);
 
-  void addDegreeProgram(String universitySlug, DegreeProgram degreeProgram);
+  String addDegreeProgram(String universitySlug, DegreeProgramCreationDTO degreeProgramCreationDTO);
 
   void removeDegreeProgram(String universitySlug, String degreeProgramSlug);
 }

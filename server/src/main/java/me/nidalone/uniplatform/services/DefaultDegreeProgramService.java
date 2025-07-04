@@ -1,12 +1,16 @@
 package me.nidalone.uniplatform.services;
 
+import me.nidalone.uniplatform.domain.dto.DegreeProgramCreationDTO;
+import me.nidalone.uniplatform.domain.dto.DegreeProgramDataDTO;
 import me.nidalone.uniplatform.domain.entities.DegreeProgram;
 import me.nidalone.uniplatform.domain.entities.University;
 import me.nidalone.uniplatform.exceptions.DegreeProgramAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.DegreeProgramNotFoundException;
 import me.nidalone.uniplatform.exceptions.UniversityNotFoundException;
+import me.nidalone.uniplatform.mappers.DegreeProgramMapper;
 import me.nidalone.uniplatform.repositories.DegreeProgramRepository;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
+import me.nidalone.uniplatform.utils.SlugUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,43 +20,47 @@ import java.util.Optional;
 public class DefaultDegreeProgramService implements DegreeProgramService {
   private final DegreeProgramRepository degreeProgramRepository;
   private final UniversityRepository universityRepository;
+  private final DegreeProgramMapper degreeProgramMapper;
 
   public DefaultDegreeProgramService(
-      DegreeProgramRepository degreeProgramRepository, UniversityRepository universityRepository) {
+      DegreeProgramRepository degreeProgramRepository,
+      UniversityRepository universityRepository,
+      DegreeProgramMapper degreeProgramMapper) {
     this.degreeProgramRepository = degreeProgramRepository;
     this.universityRepository = universityRepository;
+    this.degreeProgramMapper = degreeProgramMapper;
   }
 
   @Override
-  public DegreeProgram getDegreeProgramBySlug(String universitySlug, String degreeProgramSlug) {
+  public DegreeProgramDataDTO getDegreeProgramBySlug(
+      String universitySlug, String degreeProgramSlug) {
     University university =
         universityRepository
             .findBySlug(universitySlug)
             .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
 
-    return degreeProgramRepository
-        .findByUniAndSlug(university, degreeProgramSlug)
-        .orElseThrow(() -> new DegreeProgramNotFoundException(universitySlug, degreeProgramSlug));
+    return degreeProgramMapper.toDataDTO(
+        degreeProgramRepository
+            .findByUniAndSlug(university, degreeProgramSlug)
+            .orElseThrow(
+                () -> new DegreeProgramNotFoundException(universitySlug, degreeProgramSlug)));
   }
 
   @Override
-  public List<DegreeProgram> getAllDegreePrograms(String universitySlug) {
+  public List<DegreeProgramDataDTO> getAllDegreePrograms(String universitySlug) {
     University university =
         universityRepository
             .findBySlug(universitySlug)
             .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
-    return university.getDegreePrograms();
+
+    return university.getDegreePrograms().stream().map(degreeProgramMapper::toDataDTO).toList();
   }
 
   @Override
-  public void addDegreeProgram(String universitySlug, DegreeProgram degreeProgram) {
-    if (degreeProgram.getName().isEmpty()) {
+  public String addDegreeProgram(
+      String universitySlug, DegreeProgramCreationDTO degreeProgramCreationDTO) {
+    if (degreeProgramCreationDTO.name().isEmpty()) {
       throw new IllegalArgumentException();
-    }
-
-    if (degreeProgram.getSlug().isEmpty()) {
-      // It means that the degreeProgram was created with no parameters somehow
-      throw new RuntimeException();
     }
 
     University university =
@@ -61,12 +69,17 @@ public class DefaultDegreeProgramService implements DegreeProgramService {
             .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
 
     Optional<DegreeProgram> c =
-        degreeProgramRepository.findByUniAndSlug(university, degreeProgram.getSlug());
+        degreeProgramRepository.findByUniAndSlug(
+            university, SlugUtil.toSlug(degreeProgramCreationDTO.name()));
     if (c.isPresent()) {
-      throw new DegreeProgramAlreadyExistsException(university.getName(), degreeProgram.getName());
+      throw new DegreeProgramAlreadyExistsException(
+          university.getName(), degreeProgramCreationDTO.name());
     }
 
+    DegreeProgram degreeProgram =
+        degreeProgramMapper.fromCreationDTO(degreeProgramCreationDTO, university);
     degreeProgramRepository.save(degreeProgram);
+    return degreeProgram.getSlug();
   }
 
   @Override

@@ -2,6 +2,7 @@ package me.nidalone.uniplatform.services;
 
 import com.neovisionaries.i18n.CountryCode;
 import me.nidalone.uniplatform.domain.dto.UniversityCreationDTO;
+import me.nidalone.uniplatform.domain.dto.UniversityDataDTO;
 import me.nidalone.uniplatform.domain.entities.University;
 import me.nidalone.uniplatform.exceptions.UniversityAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.UniversityNotFoundException;
@@ -25,15 +26,16 @@ public class DefaultUniversityService implements UniversityService {
   }
 
   @Override
-  public List<University> getAllUniversities() {
-    return universityRepository.findAll();
+  public List<UniversityDataDTO> getAllUniversities() {
+    return universityRepository.findAll().stream().map(universityMapper::toDataDTO).toList();
   }
 
   @Override
-  public University getUniversityBySlug(String universitySlug) {
-    return universityRepository
-        .findBySlug(universitySlug)
-        .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
+  public UniversityDataDTO getUniversityBySlug(String universitySlug) {
+    return universityMapper.toDataDTO(
+        universityRepository
+            .findBySlug(universitySlug)
+            .orElseThrow(() -> new UniversityNotFoundException(universitySlug)));
   }
 
   @Override

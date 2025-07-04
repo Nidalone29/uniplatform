@@ -1,16 +1,17 @@
 package me.nidalone.uniplatform.services;
 
-import me.nidalone.uniplatform.domain.entities.Course;
+import me.nidalone.uniplatform.domain.dto.CourseCreationDTO;
+import me.nidalone.uniplatform.domain.dto.CourseDataDTO;
 
 import java.util.List;
 
 public interface CourseService {
 
-  Course getCourse(String universitySlug, String degreeProgramSlug, String courseSlug);
+  CourseDataDTO getCourse(String universitySlug, String degreeProgramSlug, String courseSlug);
 
-  List<Course> getAllCourses(String universitySlug, String degreeProgramSlug);
+  List<CourseDataDTO> getAllCourses(String universitySlug, String degreeProgramSlug);
 
-  void addNewCourse(String universitySlug, String degreeProgramSlug, Course course);
+  String addNewCourse(String universitySlug, String degreeProgramSlug, CourseCreationDTO course);
 
   void updateCourseECTS(
       String universitySlug, String degreeProgramSlug, String courseSlug, int ects);

@@ -2,10 +2,6 @@ package me.nidalone.uniplatform.controllers;
 
 import me.nidalone.uniplatform.domain.dto.CourseCreationDTO;
 import me.nidalone.uniplatform.domain.dto.CourseDataDTO;
-import me.nidalone.uniplatform.domain.entities.Course;
-import me.nidalone.uniplatform.domain.entities.DegreeProgram;
-import me.nidalone.uniplatform.mappers.CourseMapper;
-import me.nidalone.uniplatform.services.DegreeProgramService;
 import me.nidalone.uniplatform.services.CourseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +14,9 @@ import java.util.List;
     path = "/api/universities/{universitySlug}/degree-programs/{degreeProgramSlug}/courses")
 public class CourseController {
   private final CourseService courseService;
-  private final DegreeProgramService degreeProgramService;
 
-  private final CourseMapper courseMapper;
-
-  public CourseController(
-      CourseService courseService,
-      DegreeProgramService degreeProgramService,
-      CourseMapper courseMapper) {
+  public CourseController(CourseService courseService) {
     this.courseService = courseService;
-    this.degreeProgramService = degreeProgramService;
-    this.courseMapper = courseMapper;
   }
 
   /**
@@ -41,11 +29,7 @@ public class CourseController {
   @GetMapping(path = "/")
   public ResponseEntity<List<CourseDataDTO>> getAllCourses(
       @PathVariable String universitySlug, @PathVariable String degreeProgramSlug) {
-    return ResponseEntity.ok()
-        .body(
-            courseService.getAllCourses(universitySlug, degreeProgramSlug).stream()
-                .map(courseMapper::toDataDTO)
-                .toList());
+    return ResponseEntity.ok().body(courseService.getAllCourses(universitySlug, degreeProgramSlug));
   }
 
   /**
@@ -61,8 +45,8 @@ public class CourseController {
       @PathVariable String universitySlug,
       @PathVariable String degreeProgramSlug,
       @PathVariable String courseSlug) {
-    Course res = courseService.getCourse(universitySlug, degreeProgramSlug, courseSlug);
-    return ResponseEntity.ok(courseMapper.toDataDTO(res));
+    return ResponseEntity.ok(
+        courseService.getCourse(universitySlug, degreeProgramSlug, courseSlug));
   }
 
   /**
@@ -76,11 +60,7 @@ public class CourseController {
       @PathVariable String universitySlug,
       @PathVariable String degreeProgramSlug,
       @ModelAttribute CourseCreationDTO courseCreationDTO) {
-    DegreeProgram degreeProgram =
-        degreeProgramService.getDegreeProgramBySlug(universitySlug, degreeProgramSlug);
-    Course course = courseMapper.fromCreationDTO(courseCreationDTO, degreeProgram);
-    courseService.addNewCourse(universitySlug, degreeProgramSlug, course);
-    String slug = course.getSlug();
+    String slug = courseService.addNewCourse(universitySlug, degreeProgramSlug, courseCreationDTO);
     return ResponseEntity.created(
             ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{slug}")

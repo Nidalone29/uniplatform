@@ -1,15 +1,16 @@
 package me.nidalone.uniplatform.services;
 
 import me.nidalone.uniplatform.domain.dto.UniversityCreationDTO;
+import me.nidalone.uniplatform.domain.dto.UniversityDataDTO;
 import me.nidalone.uniplatform.domain.entities.University;
 
 import java.util.List;
 
 public interface UniversityService {
 
-  List<University> getAllUniversities();
+  List<UniversityDataDTO> getAllUniversities();
 
-  University getUniversityBySlug(String universitySlug);
+  UniversityDataDTO getUniversityBySlug(String universitySlug);
 
   /**
    * @param university

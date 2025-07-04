@@ -38,15 +38,15 @@ public class Course {
 
   public Course() {}
 
-  public UUID getExamID() {
+  public UUID getCourseID() {
     return courseID;
   }
 
-  public DegreeProgram getCourse() {
+  public DegreeProgram getDegreeProgram() {
     return degreeProgram;
   }
 
-  public void setCourse(DegreeProgram degreeProgram) {
+  public void setDegreeProgram(DegreeProgram degreeProgram) {
     this.degreeProgram = degreeProgram;
   }
 

@@ -1,5 +1,7 @@
 package me.nidalone.uniplatform.services;
 
+import me.nidalone.uniplatform.domain.dto.CourseCreationDTO;
+import me.nidalone.uniplatform.domain.dto.CourseDataDTO;
 import me.nidalone.uniplatform.domain.entities.Course;
 import me.nidalone.uniplatform.domain.entities.DegreeProgram;
 import me.nidalone.uniplatform.domain.entities.University;
@@ -7,9 +9,11 @@ import me.nidalone.uniplatform.exceptions.DegreeProgramNotFoundException;
 import me.nidalone.uniplatform.exceptions.CourseAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.CourseNotFoundException;
 import me.nidalone.uniplatform.exceptions.UniversityNotFoundException;
+import me.nidalone.uniplatform.mappers.CourseMapper;
 import me.nidalone.uniplatform.repositories.DegreeProgramRepository;
 import me.nidalone.uniplatform.repositories.CourseRepository;
 import me.nidalone.uniplatform.repositories.UniversityRepository;
+import me.nidalone.uniplatform.utils.SlugUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,18 +24,22 @@ public class DefaultCourseService implements CourseService {
   private final CourseRepository courseRepository;
   private final DegreeProgramRepository degreeProgramRepository;
   private final UniversityRepository universityRepository;
+  private final CourseMapper courseMapper;
 
   public DefaultCourseService(
       CourseRepository courseRepository,
       DegreeProgramRepository degreeProgramRepository,
-      UniversityRepository universityRepository) {
+      UniversityRepository universityRepository,
+      CourseMapper courseMapper) {
     this.courseRepository = courseRepository;
     this.degreeProgramRepository = degreeProgramRepository;
     this.universityRepository = universityRepository;
+    this.courseMapper = courseMapper;
   }
 
   @Override
-  public Course getCourse(String universitySlug, String degreeProgramSlug, String courseSlug) {
+  public CourseDataDTO getCourse(
+      String universitySlug, String degreeProgramSlug, String courseSlug) {
     University university =
         universityRepository
             .findBySlug(universitySlug)
@@ -42,14 +50,15 @@ public class DefaultCourseService implements CourseService {
             .orElseThrow(
                 () -> new DegreeProgramNotFoundException(universitySlug, degreeProgramSlug));
 
-    return courseRepository
-        .findByDegreeProgramAndSlug(degreeProgram, courseSlug)
-        .orElseThrow(
-            () -> new CourseNotFoundException(universitySlug, degreeProgramSlug, courseSlug));
+    return courseMapper.toDataDTO(
+        courseRepository
+            .findByDegreeProgramAndSlug(degreeProgram, courseSlug)
+            .orElseThrow(
+                () -> new CourseNotFoundException(universitySlug, degreeProgramSlug, courseSlug)));
   }
 
   @Override
-  public List<Course> getAllCourses(String universitySlug, String degreeProgramSlug) {
+  public List<CourseDataDTO> getAllCourses(String universitySlug, String degreeProgramSlug) {
     University university =
         universityRepository
             .findBySlug(universitySlug)
@@ -59,42 +68,42 @@ public class DefaultCourseService implements CourseService {
             .findByUniAndSlug(university, degreeProgramSlug)
             .orElseThrow(
                 () -> new DegreeProgramNotFoundException(universitySlug, degreeProgramSlug));
-    return degreeProgram.getCourses();
+
+    return degreeProgram.getCourses().stream().map(courseMapper::toDataDTO).toList();
   }
 
   @Override
-  public void addNewCourse(String universitySlug, String degreeProgramSlug, Course course) {
-    if (course.getName().isEmpty()) {
+  public String addNewCourse(
+      String universitySlug, String degreeProgramSlug, CourseCreationDTO courseCreationDTO) {
+    University university =
+        universityRepository
+            .findBySlug(universitySlug)
+            .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
+    DegreeProgram degreeProgram =
+        degreeProgramRepository
+            .findByUniAndSlug(university, degreeProgramSlug)
+            .orElseThrow(
+                () -> new DegreeProgramNotFoundException(universitySlug, degreeProgramSlug));
+
+    if (courseCreationDTO.name().isEmpty()) {
       throw new IllegalArgumentException();
     }
-
-    if (course.getSlug().isEmpty()) {
-      // It means that the course was created with no parameters somehow
-      throw new RuntimeException();
-    }
-
-    if (course.getEcts() < 1 || course.getEcts() > 30) {
-      throw new IllegalArgumentException();
-    }
-
-    University university =
-        universityRepository
-            .findBySlug(universitySlug)
-            .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
-    DegreeProgram degreeProgram =
-        degreeProgramRepository
-            .findByUniAndSlug(university, degreeProgramSlug)
-            .orElseThrow(
-                () -> new DegreeProgramNotFoundException(universitySlug, degreeProgramSlug));
 
     Optional<Course> c =
-        courseRepository.findByDegreeProgramAndSlug(degreeProgram, course.getSlug());
+        courseRepository.findByDegreeProgramAndSlug(
+            degreeProgram, SlugUtil.toSlug(courseCreationDTO.name()));
     if (c.isPresent()) {
       throw new CourseAlreadyExistsException(
-          university.getName(), degreeProgram.getName(), course.getName());
+          university.getName(), degreeProgram.getName(), courseCreationDTO.name());
     }
 
+    if (courseCreationDTO.ects() < 1 || courseCreationDTO.ects() > 30) {
+      throw new IllegalArgumentException();
+    }
+
+    Course course = courseMapper.fromCreationDTO(courseCreationDTO, degreeProgram);
     courseRepository.save(course);
+    return course.getSlug();
   }
 
   @Override
