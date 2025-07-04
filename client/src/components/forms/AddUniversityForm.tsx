@@ -32,6 +32,8 @@ export function AddUniversityForm({
     resolver: zodResolver(AddUniversityFormSchema),
     defaultValues: {
       name: "",
+      acronym: "",
+      country_code: "",
     },
   });
 
