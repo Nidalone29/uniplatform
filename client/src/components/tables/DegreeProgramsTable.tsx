@@ -16,7 +16,10 @@ import { DeleteDialog } from "@/components/common/DeleteDialog";
 import { EditingDialog } from "@/components/common/EditingDialog";
 import { AddDegreeProgramForm } from "@/components/forms/AddDegreeProgramForm";
 import { ModifyDegreeProgramForm } from "@/components/forms/ModifyDegreeProgramForm";
-import type { DegreeProgram } from "@/types/degreeProgram";
+import {
+  type DegreeProgram,
+  degreeProgramTypeLabels,
+} from "@/types/degreeProgram";
 
 export function DegreeProgramsTable() {
   const { university, degreePrograms } =
@@ -58,8 +61,10 @@ export function DegreeProgramsTable() {
               >
                 <TableCell className="font-medium">
                   {degreeProgram.name}
-                </TableCell>{" "}
-                <TableCell>{degreeProgram.type}</TableCell>
+                </TableCell>
+                <TableCell>
+                  {degreeProgramTypeLabels[degreeProgram.type]}
+                </TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={(e) => e.stopPropagation()}>

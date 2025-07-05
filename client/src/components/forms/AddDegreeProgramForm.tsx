@@ -24,6 +24,7 @@ import { useFormFetcher } from "@/hooks/useFormFetcher";
 import {
   AddDegreeProgramFormSchema,
   type DegreeProgram,
+  degreeProgramTypeLabels,
 } from "@/types/degreeProgram";
 import type { FormInDialogProps } from "@/types/formTypes";
 
@@ -86,20 +87,9 @@ export function AddDegreeProgramForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="BACHELOR">Bachelor Degree</SelectItem>
-                  <SelectItem value="MASTER_I">
-                    Master Degree (1st level)
-                  </SelectItem>
-                  <SelectItem value="MASTER_II">
-                    Master Degree (2nd level)
-                  </SelectItem>
-                  <SelectItem value="SINGLE_CYCLE_MASTER">
-                    Master Degree (Integrated 5 Years)
-                  </SelectItem>
-                  <SelectItem value="SPECIALIZATION">
-                    Specialist degree
-                  </SelectItem>
-                  <SelectItem value="DOCTORAL">Doctorate</SelectItem>
+                  {Object.entries(degreeProgramTypeLabels).map(([k, v]) => (
+                    <SelectItem value={k}>{v}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </FormItem>

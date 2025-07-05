@@ -9,16 +9,24 @@ interface DegreeProgram {
   courses: Course[];
 }
 
-const DegreeProgramTypeEnum = z.enum([
-  "BACHELOR",
-  "MASTER_I",
-  "MASTER_II",
-  "SINGLE_CYCLE_MASTER",
-  "DOCTORAL",
-  "SPECIALIZATION",
-]);
+const degreeProgramTypeLabels = {
+  BACHELOR: "Bachelor Degree",
+  MASTER_I: "Master Degree (1st level)",
+  MASTER_II: "Master Degree (2nd level)",
+  SINGLE_CYCLE_MASTER: "Master Degree (Integrated 5 Years)",
+  DOCTORAL: "Doctorate (PhD)",
+  SPECIALIZATION: "Specialist degree",
+} as const;
 
-type DegreeProgramType = z.infer<typeof DegreeProgramTypeEnum>;
+type DegreeProgramType = keyof typeof degreeProgramTypeLabels;
+
+// I haven't found a better way of doing this than re-specifying all the enum values
+const DegreeProgramTypeEnum = z.enum(
+  Object.keys(degreeProgramTypeLabels) as [
+    DegreeProgramType,
+    ...DegreeProgramType[],
+  ],
+);
 
 const AddDegreeProgramFormSchema = z.object({
   name: z.string().min(2, {
@@ -33,5 +41,6 @@ export {
   AddDegreeProgramFormSchema,
   type DegreeProgram,
   type DegreeProgramType,
+  degreeProgramTypeLabels,
   EditDegreeProgramFormSchema,
 };
