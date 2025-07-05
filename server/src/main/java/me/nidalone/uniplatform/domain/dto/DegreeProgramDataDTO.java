@@ -1,3 +1,5 @@
 package me.nidalone.uniplatform.domain.dto;
 
-public record DegreeProgramDataDTO(String name, String slug) {}
+import me.nidalone.uniplatform.domain.enums.DegreeProgramType;
+
+public record DegreeProgramDataDTO(String name, String slug, DegreeProgramType type) {}

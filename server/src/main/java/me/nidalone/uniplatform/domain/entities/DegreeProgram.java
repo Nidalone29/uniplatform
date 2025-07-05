@@ -1,6 +1,7 @@
 package me.nidalone.uniplatform.domain.entities;
 
 import jakarta.persistence.*;
+import me.nidalone.uniplatform.domain.enums.DegreeProgramType;
 import me.nidalone.uniplatform.utils.SlugUtil;
 
 import java.util.List;
@@ -24,6 +25,10 @@ public class DegreeProgram {
   @Column(name = "degree_program_slug", nullable = false)
   private String slug;
 
+  @Column(name = "degree_program_type", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private DegreeProgramType type;
+
   @OneToMany(
       mappedBy = "degreeProgram",
       cascade = {CascadeType.ALL})
@@ -33,16 +38,18 @@ public class DegreeProgram {
   @JoinColumn(name = "university_id")
   private University uni;
 
-  public DegreeProgram(String name, List<Course> courses, University uni) {
+  public DegreeProgram(String name, DegreeProgramType type, List<Course> courses, University uni) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
+    this.type = type;
     this.courses = courses;
     this.uni = uni;
   }
 
-  public DegreeProgram(String name, University uni) {
+  public DegreeProgram(String name, DegreeProgramType type, University uni) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
+    this.type = type;
     this.uni = uni;
   }
 
@@ -70,6 +77,14 @@ public class DegreeProgram {
 
   public String getSlug() {
     return slug;
+  }
+
+  public DegreeProgramType getType() {
+    return type;
+  }
+
+  public void setType(DegreeProgramType type) {
+    this.type = type;
   }
 
   public University getUni() {

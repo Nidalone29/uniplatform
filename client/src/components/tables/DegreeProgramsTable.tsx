@@ -44,8 +44,8 @@ export function DegreeProgramsTable() {
         <Table className="w-full table-fixed">
           <TableHeader className="bg-card">
             <TableRow>
-              <TableHead className="w-[100px]">Degree Program name</TableHead>
-              <TableHead></TableHead>
+              <TableHead className="">Degree Program name</TableHead>
+              <TableHead className="">Type</TableHead>
               <TableHead className="w-[104px] text-center">Edit</TableHead>
             </TableRow>
           </TableHeader>
@@ -58,8 +58,8 @@ export function DegreeProgramsTable() {
               >
                 <TableCell className="font-medium">
                   {degreeProgram.name}
-                </TableCell>
-                <TableCell></TableCell>
+                </TableCell>{" "}
+                <TableCell>{degreeProgram.type}</TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">
                     <span onClick={(e) => e.stopPropagation()}>

@@ -4,6 +4,7 @@ import me.nidalone.uniplatform.domain.dto.DegreeProgramCreationDTO;
 import me.nidalone.uniplatform.domain.dto.DegreeProgramDataDTO;
 import me.nidalone.uniplatform.domain.entities.DegreeProgram;
 import me.nidalone.uniplatform.domain.entities.University;
+import me.nidalone.uniplatform.domain.enums.DegreeProgramType;
 import me.nidalone.uniplatform.exceptions.DegreeProgramAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.DegreeProgramNotFoundException;
 import me.nidalone.uniplatform.exceptions.UniversityNotFoundException;
@@ -75,6 +76,9 @@ public class DefaultDegreeProgramService implements DegreeProgramService {
       throw new DegreeProgramAlreadyExistsException(
           university.getName(), degreeProgramCreationDTO.name());
     }
+
+    // TODO throw a more appropriate exception
+    // DegreeProgramType.valueOf(degreeProgramCreationDTO.type());
 
     DegreeProgram degreeProgram =
         degreeProgramMapper.fromCreationDTO(degreeProgramCreationDTO, university);

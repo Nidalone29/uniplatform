@@ -12,6 +12,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { useFormFetcher } from "@/hooks/useFormFetcher";
 import {
@@ -63,6 +70,38 @@ export function AddDegreeProgramForm({
                 <Input placeholder="Computer science" {...field} />
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Degree Program Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a degree type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="BACHELOR">Bachelor Degree</SelectItem>
+                  <SelectItem value="MASTER_I">
+                    Master Degree (1st level)
+                  </SelectItem>
+                  <SelectItem value="MASTER_II">
+                    Master Degree (2nd level)
+                  </SelectItem>
+                  <SelectItem value="SINGLE_CYCLE_MASTER">
+                    Master Degree (Integrated 5 Years)
+                  </SelectItem>
+                  <SelectItem value="SPECIALIZATION">
+                    Specialist degree
+                  </SelectItem>
+                  <SelectItem value="DOCTORAL">Doctorate</SelectItem>
+                </SelectContent>
+              </Select>
             </FormItem>
           )}
         />
