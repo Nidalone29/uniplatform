@@ -6,6 +6,7 @@ interface DegreeProgram {
   name: string;
   slug: string;
   type: DegreeProgramType;
+  duration: number;
   courses: Course[];
 }
 
@@ -13,7 +14,7 @@ const degreeProgramTypeLabels = {
   BACHELOR: "Bachelor Degree",
   MASTER_I: "Master Degree (1st level)",
   MASTER_II: "Master Degree (2nd level)",
-  SINGLE_CYCLE_MASTER: "Master Degree (Integrated 5 Years)",
+  SINGLE_CYCLE_MASTER: "Master Degree (Single Cycle)",
   DOCTORAL: "Doctorate (PhD)",
   SPECIALIZATION: "Specialist degree",
 } as const;
@@ -33,6 +34,15 @@ const AddDegreeProgramFormSchema = z.object({
     message: "Degree program name must be at least 2 characters.",
   }),
   type: DegreeProgramTypeEnum,
+  duration: z.coerce
+    .number()
+    .int()
+    .min(1, {
+      message: "Degree program must last at least 1 year.",
+    })
+    .max(10, {
+      message: "Degree program can't last more than 10 years.",
+    }),
 });
 
 const EditDegreeProgramFormSchema = z.object({});

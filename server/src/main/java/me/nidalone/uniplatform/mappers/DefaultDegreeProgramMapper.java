@@ -13,12 +13,18 @@ public class DefaultDegreeProgramMapper implements DegreeProgramMapper {
   public DegreeProgram fromCreationDTO(
       DegreeProgramCreationDTO degreeProgramCreationDTO, University university) {
     return new DegreeProgram(
-        degreeProgramCreationDTO.name(), degreeProgramCreationDTO.type(), university);
+        degreeProgramCreationDTO.name(),
+        degreeProgramCreationDTO.type(),
+        degreeProgramCreationDTO.duration(),
+        university);
   }
 
   @Override
   public DegreeProgramDataDTO toDataDTO(DegreeProgram degreeProgram) {
     return new DegreeProgramDataDTO(
-        degreeProgram.getName(), degreeProgram.getSlug(), degreeProgram.getType());
+        degreeProgram.getName(),
+        degreeProgram.getSlug(),
+        degreeProgram.getType(),
+        degreeProgram.getDuration());
   }
 }

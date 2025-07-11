@@ -69,12 +69,16 @@ public class DefaultDegreeProgramService implements DegreeProgramService {
             .findBySlug(universitySlug)
             .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
 
-    Optional<DegreeProgram> c =
+    Optional<DegreeProgram> deg_program =
         degreeProgramRepository.findByUniAndSlug(
             university, SlugUtil.toSlug(degreeProgramCreationDTO.name()));
-    if (c.isPresent()) {
+    if (deg_program.isPresent()) {
       throw new DegreeProgramAlreadyExistsException(
           university.getName(), degreeProgramCreationDTO.name());
+    }
+
+    if (degreeProgramCreationDTO.duration() < 1 || degreeProgramCreationDTO.duration() > 10) {
+      throw new IllegalArgumentException();
     }
 
     // TODO throw a more appropriate exception

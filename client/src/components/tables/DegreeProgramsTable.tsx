@@ -49,6 +49,7 @@ export function DegreeProgramsTable() {
             <TableRow>
               <TableHead className="">Degree Program name</TableHead>
               <TableHead className="">Type</TableHead>
+              <TableHead className="">Duration</TableHead>
               <TableHead className="w-[104px] text-center">Edit</TableHead>
             </TableRow>
           </TableHeader>
@@ -64,6 +65,10 @@ export function DegreeProgramsTable() {
                 </TableCell>
                 <TableCell>
                   {degreeProgramTypeLabels[degreeProgram.type]}
+                </TableCell>
+                <TableCell>
+                  {degreeProgram.duration}{" "}
+                  {degreeProgram.duration > 1 ? "Years" : "Year"}
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">

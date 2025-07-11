@@ -43,6 +43,7 @@ export function AddDegreeProgramForm({
     resolver: zodResolver(AddDegreeProgramFormSchema),
     defaultValues: {
       name: "",
+      duration: 3,
     },
   });
 
@@ -92,6 +93,19 @@ export function AddDegreeProgramForm({
                   ))}
                 </SelectContent>
               </Select>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="duration"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Duration (in years)</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="duration" {...field} />
+              </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

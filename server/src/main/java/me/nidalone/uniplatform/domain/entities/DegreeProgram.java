@@ -29,6 +29,10 @@ public class DegreeProgram {
   @Enumerated(EnumType.STRING)
   private DegreeProgramType type;
 
+  // the program duration is in years
+  @Column(name = "degree_program_duration", nullable = false)
+  private int duration;
+
   @OneToMany(
       mappedBy = "degreeProgram",
       cascade = {CascadeType.ALL})
@@ -38,18 +42,21 @@ public class DegreeProgram {
   @JoinColumn(name = "university_id")
   private University uni;
 
-  public DegreeProgram(String name, DegreeProgramType type, List<Course> courses, University uni) {
+  public DegreeProgram(
+      String name, DegreeProgramType type, int duration, List<Course> courses, University uni) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
     this.type = type;
+    this.duration = duration;
     this.courses = courses;
     this.uni = uni;
   }
 
-  public DegreeProgram(String name, DegreeProgramType type, University uni) {
+  public DegreeProgram(String name, DegreeProgramType type, int duration, University uni) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
     this.type = type;
+    this.duration = duration;
     this.uni = uni;
   }
 
@@ -85,6 +92,14 @@ public class DegreeProgram {
 
   public void setType(DegreeProgramType type) {
     this.type = type;
+  }
+
+  public int getDuration() {
+    return duration;
+  }
+
+  public void setDuration(int duration) {
+    this.duration = duration;
   }
 
   public University getUni() {
