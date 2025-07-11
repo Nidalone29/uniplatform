@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useLoaderData, useNavigate } from "react-router";
+import { Link, useLoaderData } from "react-router";
 
 import {
   Table,
@@ -16,23 +15,13 @@ import { DeleteDialog } from "@/components/common/DeleteDialog";
 import { EditingDialog } from "@/components/common/EditingDialog";
 import { AddDegreeProgramForm } from "@/components/forms/AddDegreeProgramForm";
 import { ModifyDegreeProgramForm } from "@/components/forms/ModifyDegreeProgramForm";
-import {
-  type DegreeProgram,
-  degreeProgramTypeLabels,
-} from "@/types/degreeProgram";
+import { degreeProgramTypeLabels } from "@/types/degreeProgram";
+
+import { Button } from "../ui/button";
 
 export function DegreeProgramsTable() {
   const { university, degreePrograms } =
     useLoaderData<typeof loadDataDegreeProgram>();
-  const [degreeProgramsState, setDegreePrograms] = useState<DegreeProgram[]>(
-    [],
-  );
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setDegreePrograms(degreePrograms!);
-  }, [degreePrograms]);
 
   return (
     <div>
@@ -50,16 +39,15 @@ export function DegreeProgramsTable() {
               <TableHead className="">Degree Program name</TableHead>
               <TableHead className="">Type</TableHead>
               <TableHead className="">Duration</TableHead>
+              <TableHead className="w-[180px] text-center">
+                Available Courses
+              </TableHead>
               <TableHead className="w-[104px] text-center">Edit</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {degreeProgramsState.map((degreeProgram) => (
-              <TableRow
-                onClick={() => {
-                  navigate(`${degreeProgram.slug}`, { viewTransition: true });
-                }}
-              >
+            {degreePrograms.map((degreeProgram) => (
+              <TableRow>
                 <TableCell className="font-medium">
                   {degreeProgram.name}
                 </TableCell>
@@ -71,17 +59,22 @@ export function DegreeProgramsTable() {
                   {degreeProgram.duration > 1 ? "Years" : "Year"}
                 </TableCell>
                 <TableCell>
+                  <div className="flex justify-center space-x-2">
+                    <Button variant={"secondary"} asChild>
+                      <Link to={`${degreeProgram.slug}`} viewTransition>
+                        View Courses
+                      </Link>
+                    </Button>
+                  </div>
+                </TableCell>
+                <TableCell>
                   <div className="flex justify-end space-x-2">
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <EditingDialog
-                        formId="edit-course"
-                        data={degreeProgram}
-                        CustomForm={ModifyDegreeProgramForm}
-                      />
-                    </span>
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <DeleteDialog data={degreeProgram} />
-                    </span>
+                    <EditingDialog
+                      formId="edit-course"
+                      data={degreeProgram}
+                      CustomForm={ModifyDegreeProgramForm}
+                    />
+                    <DeleteDialog data={degreeProgram} />
                   </div>
                 </TableCell>
               </TableRow>
