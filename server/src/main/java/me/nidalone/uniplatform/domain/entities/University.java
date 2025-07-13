@@ -35,19 +35,19 @@ public class University {
   private List<DegreeProgram> degreePrograms;
 
   public University(
-      String name, List<DegreeProgram> degreePrograms, CountryCode country, String acronym) {
+      String name, CountryCode country, String acronym, List<DegreeProgram> degreePrograms) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
-    this.degreePrograms = degreePrograms;
     this.country = country;
     this.acronym = acronym;
+    this.degreePrograms = degreePrograms;
   }
 
-  public University(String name, List<DegreeProgram> degreePrograms, CountryCode country) {
+  public University(String name, CountryCode country, List<DegreeProgram> degreePrograms) {
     this.name = name;
     this.slug = SlugUtil.toSlug(name);
-    this.degreePrograms = degreePrograms;
     this.country = country;
+    this.degreePrograms = degreePrograms;
   }
 
   public University(String name, CountryCode country, String acronym) {
@@ -117,12 +117,14 @@ public class University {
     return Objects.equals(universityID, that.universityID)
         && Objects.equals(name, that.name)
         && Objects.equals(slug, that.slug)
+        && country == that.country
+        && Objects.equals(acronym, that.acronym)
         && Objects.equals(degreePrograms, that.degreePrograms);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(universityID, name, slug, degreePrograms);
+    return Objects.hash(universityID, name, slug, country, acronym, degreePrograms);
   }
 
   public Optional<DegreeProgram> findDegreeProgram(String degreeProgram) {

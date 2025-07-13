@@ -15,6 +15,7 @@ import { DeleteDialog } from "@/components/common/DeleteDialog";
 import { EditingDialog } from "@/components/common/EditingDialog";
 import { AddCourseForm } from "@/components/forms/AddCourseForm";
 import { ModifyCourseForm } from "@/components/forms/ModifyCourseForm";
+import { attendanceLabels, examTypeLabels } from "@/types/course";
 
 export function CoursesTable() {
   const { university, degreeProgram, courses } =
@@ -34,6 +35,8 @@ export function CoursesTable() {
             <TableRow>
               <TableHead className="w-[100px]">Course name</TableHead>
               <TableHead>ETCS</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Attendance</TableHead>
               <TableHead className="w-[104px] text-center">Edit</TableHead>
             </TableRow>
           </TableHeader>
@@ -42,18 +45,16 @@ export function CoursesTable() {
               <TableRow>
                 <TableCell className="font-medium">{course.name}</TableCell>
                 <TableCell>{course.ects}</TableCell>
+                <TableCell>{examTypeLabels[course.type_of_exam]}</TableCell>
+                <TableCell>{attendanceLabels[course.attendance]}</TableCell>
                 <TableCell>
                   <div className="flex justify-end space-x-2">
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <EditingDialog
-                        formId="edit-course"
-                        data={course}
-                        CustomForm={ModifyCourseForm}
-                      />
-                    </span>
-                    <span onClick={(e) => e.stopPropagation()}>
-                      <DeleteDialog data={course} />
-                    </span>
+                    <EditingDialog
+                      formId="edit-course"
+                      data={course}
+                      CustomForm={ModifyCourseForm}
+                    />
+                    <DeleteDialog data={course} />
                   </div>
                 </TableCell>
               </TableRow>

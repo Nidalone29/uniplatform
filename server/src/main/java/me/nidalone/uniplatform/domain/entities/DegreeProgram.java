@@ -113,17 +113,19 @@ public class DegreeProgram {
   @Override
   public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) return false;
-    DegreeProgram degreeProgram = (DegreeProgram) o;
-    return Objects.equals(degreeProgramID, degreeProgram.degreeProgramID)
-        && Objects.equals(name, degreeProgram.name)
-        && Objects.equals(slug, degreeProgram.slug)
-        && Objects.equals(courses, degreeProgram.courses)
-        && Objects.equals(uni, degreeProgram.uni);
+    DegreeProgram that = (DegreeProgram) o;
+    return duration == that.duration
+        && Objects.equals(degreeProgramID, that.degreeProgramID)
+        && Objects.equals(name, that.name)
+        && Objects.equals(slug, that.slug)
+        && type == that.type
+        && Objects.equals(courses, that.courses)
+        && Objects.equals(uni, that.uni);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(degreeProgramID, name, slug, courses, uni);
+    return Objects.hash(degreeProgramID, name, slug, type, duration, courses, uni);
   }
 
   public Optional<Course> findCourse(String course) {

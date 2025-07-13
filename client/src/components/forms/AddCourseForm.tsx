@@ -12,9 +12,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { useFormFetcher } from "@/hooks/useFormFetcher";
-import { AddCourseFormSchema, type Course } from "@/types/course";
+import {
+  AddCourseFormSchema,
+  attendanceLabels,
+  type Course,
+  examTypeLabels,
+} from "@/types/course";
 import type { FormInDialogProps } from "@/types/formTypes";
 
 export function AddCourseForm({
@@ -74,6 +86,48 @@ export function AddCourseForm({
                 <Input type="number" placeholder="ects" {...field} />
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="type_of_exam"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Type of exam</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a exam type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {Object.entries(examTypeLabels).map(([k, v]) => (
+                    <SelectItem value={k}>{v}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="attendance"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Attendance</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a degree type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {Object.entries(attendanceLabels).map(([k, v]) => (
+                    <SelectItem value={k}>{v}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </FormItem>
           )}
         />

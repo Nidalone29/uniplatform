@@ -11,11 +11,21 @@ public class DefaultCourseMapper implements CourseMapper {
 
   @Override
   public Course fromCreationDTO(CourseCreationDTO courseCreationDTO, DegreeProgram degreeProgram) {
-    return new Course(courseCreationDTO.name(), courseCreationDTO.ects(), degreeProgram);
+    return new Course(
+        courseCreationDTO.name(),
+        courseCreationDTO.ects(),
+        courseCreationDTO.type_of_exam(),
+        courseCreationDTO.attendance(),
+        degreeProgram);
   }
 
   @Override
   public CourseDataDTO toDataDTO(Course course) {
-    return new CourseDataDTO(course.getName(), course.getSlug(), course.getEcts());
+    return new CourseDataDTO(
+        course.getName(),
+        course.getSlug(),
+        course.getEcts(),
+        course.getTypeOfExam(),
+        course.getAttendance());
   }
 }

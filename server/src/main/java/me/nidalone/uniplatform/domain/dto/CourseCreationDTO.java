@@ -1,3 +1,7 @@
 package me.nidalone.uniplatform.domain.dto;
 
-public record CourseCreationDTO(String name, int ects) {}
+import me.nidalone.uniplatform.domain.enums.CourseAttendance;
+import me.nidalone.uniplatform.domain.enums.CourseTypeOfExam;
+
+public record CourseCreationDTO(
+    String name, int ects, CourseTypeOfExam type_of_exam, CourseAttendance attendance) {}

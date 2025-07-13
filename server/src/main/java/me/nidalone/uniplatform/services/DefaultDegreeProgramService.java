@@ -4,7 +4,6 @@ import me.nidalone.uniplatform.domain.dto.DegreeProgramCreationDTO;
 import me.nidalone.uniplatform.domain.dto.DegreeProgramDataDTO;
 import me.nidalone.uniplatform.domain.entities.DegreeProgram;
 import me.nidalone.uniplatform.domain.entities.University;
-import me.nidalone.uniplatform.domain.enums.DegreeProgramType;
 import me.nidalone.uniplatform.exceptions.DegreeProgramAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.DegreeProgramNotFoundException;
 import me.nidalone.uniplatform.exceptions.UniversityNotFoundException;

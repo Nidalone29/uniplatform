@@ -5,6 +5,8 @@ import me.nidalone.uniplatform.domain.dto.CourseDataDTO;
 import me.nidalone.uniplatform.domain.entities.Course;
 import me.nidalone.uniplatform.domain.entities.DegreeProgram;
 import me.nidalone.uniplatform.domain.entities.University;
+import me.nidalone.uniplatform.domain.enums.CourseAttendance;
+import me.nidalone.uniplatform.domain.enums.CourseTypeOfExam;
 import me.nidalone.uniplatform.exceptions.DegreeProgramNotFoundException;
 import me.nidalone.uniplatform.exceptions.CourseAlreadyExistsException;
 import me.nidalone.uniplatform.exceptions.CourseNotFoundException;
@@ -100,6 +102,10 @@ public class DefaultCourseService implements CourseService {
     if (courseCreationDTO.ects() < 1 || courseCreationDTO.ects() > 30) {
       throw new IllegalArgumentException();
     }
+
+    // TODO throw a more appropriate exception
+    // CourseTypeOfExam.valueOf(courseCreationDTO.type_of_exam());
+    // CourseAttendance.valueOf(courseCreationDTO.attendance());
 
     Course course = courseMapper.fromCreationDTO(courseCreationDTO, degreeProgram);
     courseRepository.save(course);
