@@ -138,7 +138,7 @@ export async function updateCourse(
       degreeProgram +
       "/courses/" +
       course +
-      "/update_ects",
+      "/update",
     { body: search_params },
   );
 }

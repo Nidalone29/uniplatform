@@ -54,6 +54,8 @@ const AddCourseFormSchema = z.object({
 
 const EditCourseFormSchema = z.object({
   ects: ectsSchema,
+  type_of_exam: ExamTypeEnum,
+  attendance: AttendanceEnum,
 });
 
 export {

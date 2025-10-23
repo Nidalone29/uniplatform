@@ -113,8 +113,11 @@ public class DefaultCourseService implements CourseService {
   }
 
   @Override
-  public void updateCourseECTS(
-      String universitySlug, String degreeProgramSlug, String courseSlug, int ects) {
+  public void updateCourse(
+      String universitySlug,
+      String degreeProgramSlug,
+      String courseSlug,
+      CourseDataDTO updatedCourse) {
     University university =
         universityRepository
             .findBySlug(universitySlug)
@@ -130,7 +133,10 @@ public class DefaultCourseService implements CourseService {
             .orElseThrow(
                 () -> new CourseNotFoundException(universitySlug, degreeProgramSlug, courseSlug));
 
-    course.setEcts(ects);
+    course.setEcts(updatedCourse.ects());
+    course.setAttendance(updatedCourse.attendance());
+    course.setTypeOfExam(updatedCourse.type_of_exam());
+
     courseRepository.save(course);
   }
 

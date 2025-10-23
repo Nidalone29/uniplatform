@@ -76,14 +76,13 @@ public class CourseController {
    * @param courseDataDTO
    * @return
    */
-  @PutMapping("/{courseSlug}/update_ects")
-  public ResponseEntity<String> updateECTS(
+  @PutMapping("/{courseSlug}/update")
+  public ResponseEntity<String> update(
       @PathVariable String universitySlug,
       @PathVariable String degreeProgramSlug,
       @PathVariable String courseSlug,
       @ModelAttribute CourseDataDTO courseDataDTO) {
-    courseService.updateCourseECTS(
-        universitySlug, degreeProgramSlug, courseSlug, courseDataDTO.ects());
+    courseService.updateCourse(universitySlug, degreeProgramSlug, courseSlug, courseDataDTO);
     return ResponseEntity.ok("Course updated successfully!");
   }
 

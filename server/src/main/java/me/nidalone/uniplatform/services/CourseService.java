@@ -13,8 +13,11 @@ public interface CourseService {
 
   String addNewCourse(String universitySlug, String degreeProgramSlug, CourseCreationDTO course);
 
-  void updateCourseECTS(
-      String universitySlug, String degreeProgramSlug, String courseSlug, int ects);
+  void updateCourse(
+      String universitySlug,
+      String degreeProgramSlug,
+      String courseSlug,
+      CourseDataDTO updatedCourse);
 
   void removeCourse(String universitySlug, String degreeProgramSlug, String courseSlug);
 }
