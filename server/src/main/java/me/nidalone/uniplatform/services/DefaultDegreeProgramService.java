@@ -90,6 +90,25 @@ public class DefaultDegreeProgramService implements DegreeProgramService {
   }
 
   @Override
+  public void updateDegreeProgram(
+      String universitySlug, String degreeProgramSlug, DegreeProgramDataDTO degreeProgramDataDTO) {
+    University university =
+        universityRepository
+            .findBySlug(universitySlug)
+            .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
+    DegreeProgram degreeProgram =
+        degreeProgramRepository
+            .findByUniAndSlug(university, degreeProgramSlug)
+            .orElseThrow(
+                () -> new DegreeProgramNotFoundException(universitySlug, degreeProgramSlug));
+
+    degreeProgram.setDuration(degreeProgramDataDTO.duration());
+    degreeProgram.setType(degreeProgramDataDTO.type());
+
+    degreeProgramRepository.save(degreeProgram);
+  }
+
+  @Override
   public void removeDegreeProgram(String universitySlug, String degreeProgramSlug) {
     University university =
         universityRepository

@@ -66,6 +66,21 @@ export async function addDegreeProgram(
   );
 }
 
+export async function updateDegreeProgram(
+  university: string,
+  degreeProgram: string,
+  updatedDegreeProgramData: URLSearchParams,
+) {
+  return await ky.put(
+    "http://localhost:8080/api/universities/" +
+      university +
+      "/degree-programs/" +
+      degreeProgram +
+      "/update",
+    { body: updatedDegreeProgramData },
+  );
+}
+
 export async function deleteDegreeProgram(
   university: string,
   degreeProgram: string,
@@ -129,7 +144,7 @@ export async function updateCourse(
   university: string,
   degreeProgram: string,
   course: string,
-  search_params: URLSearchParams,
+  updatedCourseData: URLSearchParams,
 ) {
   return await ky.put(
     "http://localhost:8080/api/universities/" +
@@ -139,7 +154,7 @@ export async function updateCourse(
       "/courses/" +
       course +
       "/update",
-    { body: search_params },
+    { body: updatedCourseData },
   );
 }
 

@@ -62,6 +62,22 @@ public class DegreeProgramController {
         .build();
   }
 
+  /**
+   * @param universitySlug
+   * @param degreeProgramSlug
+   * @param degreeProgramDataDTO
+   * @return
+   */
+  @PutMapping("/{degreeProgramSlug}/update")
+  public ResponseEntity<String> updateDegreeProgram(
+      @PathVariable String universitySlug,
+      @PathVariable String degreeProgramSlug,
+      @ModelAttribute DegreeProgramDataDTO degreeProgramDataDTO) {
+    degreeProgramService.updateDegreeProgram(
+        universitySlug, degreeProgramSlug, degreeProgramDataDTO);
+    return ResponseEntity.ok("Course updated successfully!");
+  }
+
   @DeleteMapping("/{degreeProgramSlug}")
   public ResponseEntity<String> deleteDegreeProgramSlug(
       @PathVariable String universitySlug, @PathVariable String degreeProgramSlug) {

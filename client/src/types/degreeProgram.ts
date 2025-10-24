@@ -29,23 +29,28 @@ const DegreeProgramTypeEnum = z.enum(
   ],
 );
 
+const durationSchema = z.coerce
+  .number()
+  .int()
+  .min(1, {
+    message: "Degree program must last at least 1 year.",
+  })
+  .max(10, {
+    message: "Degree program can't last more than 10 years.",
+  });
+
 const AddDegreeProgramFormSchema = z.object({
   name: z.string().min(2, {
     message: "Degree program name must be at least 2 characters.",
   }),
   type: DegreeProgramTypeEnum,
-  duration: z.coerce
-    .number()
-    .int()
-    .min(1, {
-      message: "Degree program must last at least 1 year.",
-    })
-    .max(10, {
-      message: "Degree program can't last more than 10 years.",
-    }),
+  duration: durationSchema,
 });
 
-const EditDegreeProgramFormSchema = z.object({});
+const EditDegreeProgramFormSchema = z.object({
+  type: DegreeProgramTypeEnum,
+  duration: durationSchema,
+});
 
 export {
   AddDegreeProgramFormSchema,

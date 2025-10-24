@@ -1,4 +1,24 @@
-import { updateCourse } from "@/api/apiCalls";
+import { updateCourse, updateDegreeProgram } from "@/api/apiCalls";
+
+export async function editDataDegreeProgram(
+  editData: URLSearchParams,
+  university_slug: string,
+  degreeProgram_slug: string,
+) {
+  return await updateDegreeProgram(
+    university_slug,
+    degreeProgram_slug,
+    editData,
+  )
+    .then(() => {
+      return { ok: true };
+    })
+    .catch((error) => {
+      // TODO handle different errors HTTPError
+      console.error("Failed to edit course:", error);
+      return { ok: false };
+    });
+}
 
 export async function editDataCourse(
   editData: URLSearchParams,

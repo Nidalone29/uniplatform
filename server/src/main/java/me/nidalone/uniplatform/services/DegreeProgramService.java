@@ -13,5 +13,8 @@ public interface DegreeProgramService {
 
   String addDegreeProgram(String universitySlug, DegreeProgramCreationDTO degreeProgramCreationDTO);
 
+  void updateDegreeProgram(
+      String universitySlug, String degreeProgramSlug, DegreeProgramDataDTO degreeProgramDataDTO);
+
   void removeDegreeProgram(String universitySlug, String degreeProgramSlug);
 }
