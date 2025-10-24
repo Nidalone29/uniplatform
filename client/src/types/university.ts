@@ -11,27 +11,34 @@ interface University {
   degree_programs: DegreeProgram[];
 }
 
+const countryCodeSchema = z.string().length(2, {
+  message: "University country must be in ISO 3166 alpha 2 format.",
+});
+
+const acronymSchema = z.optional(
+  z
+    .string()
+    .min(3, {
+      message: "University acronym must be at least 2 characters.",
+    })
+    .max(15, {
+      message: "University acronym must be shorter than 15 characters.",
+    }),
+);
+
 // TODO the schemas will all be eventually generated via https://github.com/orval-labs/orval
 const AddUniversityFormSchema = z.object({
   name: z.string().min(2, {
     message: "University name must be at least 2 characters.",
   }),
-  country_code: z.string().length(2, {
-    message: "University country must be in ISO 3166 alpha 2 format.",
-  }),
-  acronym: z.optional(
-    z
-      .string()
-      .min(3, {
-        message: "University acronym must be at least 2 characters.",
-      })
-      .max(15, {
-        message: "University acronym must be shorter than 15 characters.",
-      }),
-  ),
+  country_code: countryCodeSchema,
+  acronym: acronymSchema,
 });
 
-// for now empty
-const EditUniversityFormSchema = z.object({});
+const EditUniversityFormSchema = z.object({
+  country_code: countryCodeSchema,
+  acronym: acronymSchema,
+  number_of_programs: z.number(),
+});
 
 export { AddUniversityFormSchema, EditUniversityFormSchema, type University };

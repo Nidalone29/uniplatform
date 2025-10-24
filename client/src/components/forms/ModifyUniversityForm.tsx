@@ -3,7 +3,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 import { useFormFetcher } from "@/hooks/useFormFetcher";
 import type { FormInDialogProps } from "@/types/formTypes";
@@ -24,7 +32,11 @@ export function ModifyUniversityForm({
 
   const form = useForm<z.infer<typeof EditUniversityFormSchema>>({
     resolver: zodResolver(EditUniversityFormSchema),
-    defaultValues: {},
+    defaultValues: {
+      acronym: current_university.acronym,
+      country_code: current_university.country_code,
+      number_of_programs: current_university.number_of_programs,
+    },
   });
 
   function onSubmit(data: z.infer<typeof EditUniversityFormSchema>) {
@@ -42,7 +54,32 @@ export function ModifyUniversityForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-2/3 space-y-6"
       >
-        <p>Unsupported operation</p>
+        <FormField
+          control={form.control}
+          name="acronym"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>University Acronym</FormLabel>
+              <FormControl>
+                <Input placeholder="TU..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="country_code"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>University Country</FormLabel>
+              <FormControl>
+                <Input placeholder="Country in ISO 3166" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </form>
     </Form>
   );

@@ -69,6 +69,19 @@ public class DefaultUniversityService implements UniversityService {
   }
 
   @Override
+  public void updateUniversity(String universitySlug, UniversityDataDTO universityDataDTO) {
+    University uni =
+        universityRepository
+            .findBySlug(universitySlug)
+            .orElseThrow(() -> new UniversityNotFoundException(universitySlug));
+
+    uni.setAcronym(universityDataDTO.acronym());
+    uni.setCountry(CountryCode.getByAlpha2Code(universityDataDTO.country_code()));
+
+    universityRepository.save(uni);
+  }
+
+  @Override
   public void deleteUniversityBySlug(String universitySlug) {
     University uni =
         universityRepository

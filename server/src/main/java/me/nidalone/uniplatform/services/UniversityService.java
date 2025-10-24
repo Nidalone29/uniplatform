@@ -2,7 +2,6 @@ package me.nidalone.uniplatform.services;
 
 import me.nidalone.uniplatform.domain.dto.UniversityCreationDTO;
 import me.nidalone.uniplatform.domain.dto.UniversityDataDTO;
-import me.nidalone.uniplatform.domain.entities.University;
 
 import java.util.List;
 
@@ -17,6 +16,8 @@ public interface UniversityService {
    * @return it returns the slug of the created entity
    */
   String addNewUniversity(UniversityCreationDTO university);
+
+  void updateUniversity(String universitySlug, UniversityDataDTO university);
 
   void deleteUniversityBySlug(String universitySlug);
 }

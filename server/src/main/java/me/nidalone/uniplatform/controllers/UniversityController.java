@@ -2,6 +2,7 @@ package me.nidalone.uniplatform.controllers;
 
 import java.util.List;
 
+import me.nidalone.uniplatform.domain.dto.DegreeProgramDataDTO;
 import me.nidalone.uniplatform.domain.dto.UniversityCreationDTO;
 import me.nidalone.uniplatform.domain.dto.UniversityDataDTO;
 import me.nidalone.uniplatform.services.UniversityService;
@@ -55,6 +56,18 @@ public class UniversityController {
                 .buildAndExpand(slug)
                 .toUri())
         .build();
+  }
+
+  /**
+   * @param universitySlug
+   * @param universityDataDTO
+   * @return
+   */
+  @PutMapping("/{universitySlug}/update")
+  public ResponseEntity<String> updateUniversity(
+      @PathVariable String universitySlug, @ModelAttribute UniversityDataDTO universityDataDTO) {
+    universityService.updateUniversity(universitySlug, universityDataDTO);
+    return ResponseEntity.ok("University updated successfully!");
   }
 
   /**

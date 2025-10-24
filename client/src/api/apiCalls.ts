@@ -28,6 +28,16 @@ export async function deleteUniversity(university: string) {
   );
 }
 
+export async function updateUniversity(
+  university: string,
+  updatedUniversityData: URLSearchParams,
+) {
+  return await ky.put(
+    "http://localhost:8080/api/universities/" + university + "/update",
+    { body: updatedUniversityData },
+  );
+}
+
 export async function getDegreePrograms(
   university: string,
 ): Promise<DegreeProgram[]> {

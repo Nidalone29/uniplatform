@@ -10,7 +10,11 @@ import {
   deleteDataDegreeProgram,
   deleteDataUni,
 } from "@/api/deleteData";
-import { editDataCourse, editDataDegreeProgram } from "@/api/editData";
+import {
+  editDataCourse,
+  editDataDegreeProgram,
+  editUniversity,
+} from "@/api/editData";
 import { ContentToURLSearchParams } from "@/lib/utils";
 import type { ActionDispatcherRequest } from "@/types/ActionDispatcherRequest";
 
@@ -33,8 +37,8 @@ export async function manipulateUniversitiesDispatcher({
       return addDataUniversity(searchParams);
     }
     case "edit": {
-      // unsupported for now
-      return;
+      const searchParams = ContentToURLSearchParams(content!);
+      return editUniversity(searchParams, university_slug!);
     }
     case "delete": {
       return deleteDataUni(university_slug!);
