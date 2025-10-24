@@ -75,7 +75,7 @@ public class DegreeProgramController {
       @ModelAttribute DegreeProgramDataDTO degreeProgramDataDTO) {
     degreeProgramService.updateDegreeProgram(
         universitySlug, degreeProgramSlug, degreeProgramDataDTO);
-    return ResponseEntity.ok("Course updated successfully!");
+    return ResponseEntity.ok("Degree Program updated successfully!");
   }
 
   @DeleteMapping("/{degreeProgramSlug}")
