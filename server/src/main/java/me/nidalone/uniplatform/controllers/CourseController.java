@@ -77,7 +77,7 @@ public class CourseController {
    * @return
    */
   @PutMapping("/{courseSlug}/update")
-  public ResponseEntity<String> update(
+  public ResponseEntity<String> updateCourse(
       @PathVariable String universitySlug,
       @PathVariable String degreeProgramSlug,
       @PathVariable String courseSlug,
